@@ -62,19 +62,9 @@
           </p>
         </div>
 
-        <!-- Quick Presets & Reset Controls -->
-        <div class="flex flex-wrap items-center gap-2 no-print">
-          <span class="text-xs font-medium text-slate-400 mr-1 hidden sm:inline">Sample Cases:</span>
-          <button type="button" onclick="loadPreset('high22')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-            22yo High-Risk AP
-          </button>
-          <button type="button" onclick="loadPreset('medium45')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-            45yo Medium-Risk + Pre-DM
-          </button>
-          <button type="button" onclick="loadPreset('lower38')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-            38yo Lower-Risk + BMI 31
-          </button>
-          <button type="button" onclick="resetForm()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-rose-950/70 hover:bg-rose-900 text-rose-200 border border-rose-800/70 transition">
+        <!-- Reset Control -->
+        <div class="flex items-center no-print">
+          <button type="button" onclick="resetForm()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-rose-950/70 hover:bg-rose-900 text-rose-200 border border-rose-800/70 transition">
             Reset
           </button>
         </div>
@@ -1290,30 +1280,6 @@
         const el = document.getElementById(id);
         if (el) el.checked = false;
       });
-      evaluateAlgorithm();
-    }
-
-    function loadPreset(presetKey) {
-      resetForm();
-      if (presetKey === 'high22') {
-        selectedApRisk = 'high';
-        document.querySelector('input[name="ageGroup"][value="18to25"]').checked = true;
-        document.getElementById('heightCm').value = '175';
-        document.getElementById('baselineWeight').value = '66';
-      } else if (presetKey === 'medium45') {
-        selectedApRisk = 'medium';
-        document.querySelector('input[name="ageGroup"][value="26to75"]').checked = true;
-        document.getElementById('heightCm').value = '168';
-        document.getElementById('baselineWeight').value = '74';
-        document.getElementById('rf_prediabetes').checked = true;
-        document.getElementById('ethnicityBmi').checked = true;
-      } else if (presetKey === 'lower38') {
-        selectedApRisk = 'lower';
-        document.querySelector('input[name="ageGroup"][value="26to75"]').checked = true;
-        document.getElementById('heightCm').value = '170';
-        document.getElementById('baselineWeight').value = '90';
-        document.getElementById('rf_htn').checked = true;
-      }
       evaluateAlgorithm();
     }
 
