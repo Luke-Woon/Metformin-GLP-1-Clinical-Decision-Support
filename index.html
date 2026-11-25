@@ -58,21 +58,21 @@
             Guideline on Metformin for Prevention of Antipsychotic-Induced Weight Gain
           </h1>
           <p class="text-xs sm:text-sm text-slate-300 mt-1">
-            8 in 10 experience weight gain &bull; Choice of antipsychotic is the primary baseline predictor &bull; Always pair with lifestyle interventions
+            Adult Clinical Tool (&ge;18 years) &bull; 8 in 10 experience weight gain &bull; Always pair with lifestyle interventions
           </p>
         </div>
 
         <!-- Quick Presets & Reset Controls -->
         <div class="flex flex-wrap items-center gap-2 no-print">
           <span class="text-xs font-medium text-slate-400 mr-1 hidden sm:inline">Sample Cases:</span>
-          <button type="button" onclick="loadPreset('olanzapine22')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-            22yo Starting Olanzapine
+          <button type="button" onclick="loadPreset('high22')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+            22yo High-Risk AP
           </button>
-          <button type="button" onclick="loadPreset('risperidone45')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-            45yo Risperidone + Pre-DM
+          <button type="button" onclick="loadPreset('medium45')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+            45yo Medium-Risk + Pre-DM
           </button>
-          <button type="button" onclick="loadPreset('aripiprazole38')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-            38yo BMI 31 on Aripiprazole
+          <button type="button" onclick="loadPreset('lower38')" class="px-3 py-2 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+            38yo Lower-Risk + BMI 31
           </button>
           <button type="button" onclick="resetForm()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-rose-950/70 hover:bg-rose-900 text-rose-200 border border-rose-800/70 transition">
             Reset
@@ -102,14 +102,14 @@
       <div class="lg:col-span-7 space-y-6">
 
         <!-- ===================================================================== -->
-        <!-- STEP 1: ANTIPSYCHOTIC SELECTION & TREATMENT STAGE (TOP OF FLOWCHART)  -->
+        <!-- STEP 1: ANTIPSYCHOTIC RISK TIER & TREATMENT STAGE (NO DROPDOWN)       -->
         <!-- ===================================================================== -->
         <section class="bg-white rounded-xl border-2 border-teal-600/30 card-shadow overflow-hidden">
           <div class="bg-teal-50/80 px-5 py-3.5 border-b border-teal-200/80 flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2.5">
               <span class="w-6 h-6 rounded-full bg-teal-700 text-white text-xs font-bold flex items-center justify-center">1</span>
               <div>
-                <h2 class="text-sm sm:text-base font-bold text-slate-900">Antipsychotic Selection &amp; Risk Tier</h2>
+                <h2 class="text-sm sm:text-base font-bold text-slate-900">Antipsychotic Risk Tier &amp; Treatment Stage</h2>
                 <p class="text-[11px] text-teal-800 font-medium">To be applied at antipsychotic initiation, switch, or Year 1 review</p>
               </div>
             </div>
@@ -131,7 +131,7 @@
           </div>
 
           <div class="p-5 space-y-4">
-            <!-- 3-Column Visual Risk Tier Selector Cards (Matches Infographic Top Row) -->
+            <!-- 3-Column Visual Risk Tier Selector Cards -->
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
                 Select Antipsychotic Risk Category
@@ -142,7 +142,6 @@
                   <div>
                     <div class="flex items-center justify-between gap-1 mb-1">
                       <span class="text-sm font-extrabold text-slate-900">High Risk</span>
-                      <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800">Not 1st-line</span>
                     </div>
                     <p class="text-xs font-medium text-slate-700">Olanzapine, Clozapine</p>
                   </div>
@@ -161,7 +160,6 @@
                   <div>
                     <div class="flex items-center justify-between gap-1 mb-1">
                       <span class="text-sm font-extrabold text-slate-900">Medium Risk</span>
-                      <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Conditional</span>
                     </div>
                     <p class="text-xs font-medium text-slate-700">Quetiapine, Paliperidone, Risperidone</p>
                   </div>
@@ -177,7 +175,6 @@
                   <div>
                     <div class="flex items-center justify-between gap-1 mb-1">
                       <span class="text-sm font-extrabold text-slate-900">Lower Risk</span>
-                      <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">All Others</span>
                     </div>
                     <p class="text-xs font-medium text-slate-700">Aripiprazole, Amisulpride, Lurasidone, etc.</p>
                   </div>
@@ -190,39 +187,9 @@
               </div>
             </div>
 
-            <!-- Specific Agent Selector & Dynamic Tier Guidance Banner -->
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center pt-1">
-              <div class="sm:col-span-5">
-                <label for="antipsychotic" class="block text-xs font-semibold text-slate-700 mb-1">
-                  Specific Antipsychotic Agent
-                </label>
-                <select id="antipsychotic" onchange="onAntipsychoticDropdownChange()" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-1 focus:ring-teal-600">
-                  <optgroup label="High Risk (Not First-Line)">
-                    <option value="Olanzapine|high">Olanzapine</option>
-                    <option value="Clozapine|high">Clozapine</option>
-                  </optgroup>
-                  <optgroup label="Medium Risk">
-                    <option value="Quetiapine|medium">Quetiapine</option>
-                    <option value="Paliperidone|medium">Paliperidone</option>
-                    <option value="Risperidone|medium">Risperidone</option>
-                  </optgroup>
-                  <optgroup label="Lower Risk (All Other Antipsychotics)">
-                    <option value="Aripiprazole|lower">Aripiprazole</option>
-                    <option value="Amisulpride|lower">Amisulpride</option>
-                    <option value="Lurasidone|lower">Lurasidone</option>
-                    <option value="Haloperidol|lower">Haloperidol</option>
-                    <option value="Cariprazine|lower">Cariprazine</option>
-                    <option value="Brexpiprazole|lower">Brexpiprazole</option>
-                    <option value="Ziprasidone|lower">Ziprasidone</option>
-                    <option value="Other Antipsychotic|lower">Other Antipsychotic</option>
-                  </optgroup>
-                </select>
-              </div>
-
-              <!-- Smart Dynamic Guidance Pill based on selected tier -->
-              <div id="tierGuidanceBanner" class="sm:col-span-7 rounded-lg bg-teal-50 border border-teal-200 p-3 text-xs text-teal-950 leading-relaxed">
-                <!-- Populated dynamically -->
-              </div>
+            <!-- Full-Width Dynamic Tier Guidance Banner -->
+            <div id="tierGuidanceBanner" class="rounded-lg bg-teal-50 border border-teal-200 p-3.5 text-xs text-teal-950 leading-relaxed">
+              <!-- Populated dynamically -->
             </div>
           </div>
         </section>
@@ -245,31 +212,28 @@
           </div>
 
           <div class="p-5 space-y-5">
-            <!-- Age Group Selector -->
+            <!-- Adult Age Group Selector -->
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                Patient Age Group
+                Adult Age Group (&ge;18 years)
               </label>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <label class="cursor-pointer">
-                  <input type="radio" name="ageGroup" value="10to25" onchange="evaluateAlgorithm()" class="peer sr-only" />
-                  <div class="p-2.5 rounded-lg border border-slate-200 peer-checked:border-teal-600 peer-checked:bg-teal-50/70 peer-checked:ring-1 peer-checked:ring-teal-600 transition">
-                    <div class="text-sm font-bold text-slate-900">10–25 years</div>
-                    <div class="text-[11px] text-teal-700 font-medium">Baseline risk factor (Medium AP)</div>
+                  <input type="radio" name="ageGroup" value="18to25" onchange="evaluateAlgorithm()" class="peer sr-only" />
+                  <div class="p-3 rounded-lg border border-slate-200 text-center peer-checked:border-teal-600 peer-checked:bg-teal-50/70 peer-checked:ring-1 peer-checked:ring-teal-600 transition">
+                    <div class="text-sm font-bold text-slate-900">18–25 years</div>
                   </div>
                 </label>
                 <label class="cursor-pointer">
                   <input type="radio" name="ageGroup" value="26to75" checked onchange="evaluateAlgorithm()" class="peer sr-only" />
-                  <div class="p-2.5 rounded-lg border border-slate-200 peer-checked:border-teal-600 peer-checked:bg-teal-50/70 peer-checked:ring-1 peer-checked:ring-teal-600 transition">
+                  <div class="p-3 rounded-lg border border-slate-200 text-center peer-checked:border-teal-600 peer-checked:bg-teal-50/70 peer-checked:ring-1 peer-checked:ring-teal-600 transition">
                     <div class="text-sm font-bold text-slate-900">26–75 years</div>
-                    <div class="text-[11px] text-slate-500">Standard adult bracket</div>
                   </div>
                 </label>
                 <label class="cursor-pointer">
                   <input type="radio" name="ageGroup" value="gt75" onchange="evaluateAlgorithm()" class="peer sr-only" />
-                  <div class="p-2.5 rounded-lg border border-slate-200 peer-checked:border-amber-600 peer-checked:bg-amber-50/70 peer-checked:ring-1 peer-checked:ring-amber-600 transition">
+                  <div class="p-3 rounded-lg border border-slate-200 text-center peer-checked:border-amber-600 peer-checked:bg-amber-50/70 peer-checked:ring-1 peer-checked:ring-amber-600 transition">
                     <div class="text-sm font-bold text-slate-900">&gt; 75 years</div>
-                    <div class="text-[11px] text-amber-700 font-medium">6-monthly renal &amp; B12 checks</div>
                   </div>
                 </label>
               </div>
@@ -322,18 +286,12 @@
                 <span>&bull; 90 kg &rarr; +2.7 kg</span>
               </div>
 
-              <!-- Ethnicity BMI & Youth Growth Trajectory Checkboxes -->
-              <div class="pt-2 border-t border-slate-200/80 space-y-2">
+              <!-- Single Ethnicity-Adjusted BMI Checkbox -->
+              <div class="pt-2 border-t border-slate-200/80">
                 <label class="flex items-start gap-2.5 cursor-pointer">
                   <input type="checkbox" id="ethnicityBmi" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                   <span class="text-xs text-slate-700">
-                    <strong>Ethnicity-adjusted BMI overweight threshold (BMI &gt; 23 kg/m&sup2;)</strong> — applies to South Asian, East Asian, Chinese, Black African/Caribbean, or Middle Eastern backgrounds.
-                  </span>
-                </label>
-                <label class="flex items-start gap-2.5 cursor-pointer">
-                  <input type="checkbox" id="youthGrowthTrigger" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
-                  <span class="text-xs text-slate-700">
-                    <strong>Young person:</strong> &gt;3% weight gained outside expected growth trajectory during Year 1.
+                    <strong>Ethnicity-adjusted BMI overweight threshold applies (BMI &gt; 23 kg/m&sup2;)</strong> — South Asian, East Asian, Chinese, Black African/Caribbean, or Middle Eastern backgrounds.
                   </span>
                 </label>
               </div>
@@ -495,17 +453,20 @@
         <!-- 1. Primary Clinical Recommendation Card -->
         <div id="decisionCard" class="rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all">
           <div id="decisionHeader" class="bg-teal-700 text-white px-5 py-4">
-            <div class="flex items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
               <span id="decisionBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-extrabold uppercase tracking-wider bg-white/20 text-white">
-                RECOMMENDATION
+                CO-COMMENCE METFORMIN
               </span>
-              <span id="decisionPathwayTag" class="text-xs font-medium text-teal-100">
-                Primary Prevention
+              <span id="gradeStrengthBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-teal-900 shadow-sm">
+                GRADE: Strong Recommendation
               </span>
             </div>
-            <h2 id="decisionTitle" class="text-lg sm:text-xl font-extrabold mt-2 leading-snug">
+            <h2 id="decisionTitle" class="text-lg sm:text-xl font-extrabold mt-2.5 leading-snug">
               Co-Commence Metformin Immediately
             </h2>
+            <p id="decisionPathwayTag" class="text-xs font-medium text-teal-100 mt-0.5">
+              High-Risk Antipsychotic &bull; At Initiation / Switch
+            </p>
           </div>
 
           <div class="p-5 space-y-4">
@@ -516,6 +477,11 @@
 
             <!-- Fallback / Special Alert Box -->
             <div id="decisionAlertBox" class="hidden rounded-lg p-3.5 text-xs sm:text-sm border">
+              <!-- Populated dynamically -->
+            </div>
+
+            <!-- GRADE & Prescribing Terminology Explainer -->
+            <div id="gradeExplainerBox" class="rounded-lg bg-slate-50 border border-slate-200/90 p-3 text-[11px] text-slate-600 leading-relaxed">
               <!-- Populated dynamically -->
             </div>
 
@@ -734,26 +700,32 @@
 
   <!-- Clinical Decision Engine JavaScript -->
   <script>
+    // Global state for the selected antipsychotic risk tier ('high' | 'medium' | 'lower')
+    let selectedApRisk = 'high';
+
+    const TIER_METADATA = {
+      high: {
+        label: 'High-Risk Antipsychotic (Olanzapine / Clozapine)',
+        shortLabel: 'High-Risk Antipsychotic',
+        examples: 'Olanzapine, Clozapine'
+      },
+      medium: {
+        label: 'Medium-Risk Antipsychotic (Quetiapine / Paliperidone / Risperidone)',
+        shortLabel: 'Medium-Risk Antipsychotic',
+        examples: 'Quetiapine, Paliperidone, Risperidone'
+      },
+      lower: {
+        label: 'Lower-Risk Antipsychotic (All Other Antipsychotics)',
+        shortLabel: 'Lower-Risk Antipsychotic',
+        examples: 'All other antipsychotics'
+      }
+    };
+
     /**
      * Handles clicking one of the 3 visual Risk Tier cards at the top of Step 1.
-     * Selects the first default antipsychotic in that tier and updates UI highlights.
      */
     function selectRiskTier(tier) {
-      const dropdown = document.getElementById('antipsychotic');
-      const currentTier = dropdown.value.split('|')[1];
-
-      if (currentTier !== tier) {
-        if (tier === 'high') dropdown.value = 'Olanzapine|high';
-        else if (tier === 'medium') dropdown.value = 'Quetiapine|medium';
-        else dropdown.value = 'Aripiprazole|lower';
-      }
-      evaluateAlgorithm();
-    }
-
-    /**
-     * Triggered when the user selects a specific medication from the dropdown.
-     */
-    function onAntipsychoticDropdownChange() {
+      selectedApRisk = tier;
       evaluateAlgorithm();
     }
 
@@ -761,14 +733,16 @@
      * Updates the visual styling of the 3 risk tier cards and highlights relevant
      * downstream sections in Step 2 to guide the clinician intuitively.
      */
-    function updateTierVisuals(apName, apRisk) {
+    function updateTierVisuals(apRisk) {
       const tiers = ['high', 'medium', 'lower'];
       tiers.forEach(t => {
         const card = document.getElementById(`tierCard_${t}`);
-        if (t === apRisk) {
-          card.className = 'text-left p-3.5 rounded-xl border-2 border-teal-600 bg-teal-50/60 ring-1 ring-teal-600 transition flex flex-col justify-between';
+        const isSelected = (t === apRisk);
+        card.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+        if (isSelected) {
+          card.className = 'text-left p-4 rounded-xl border-2 border-teal-600 bg-teal-50/60 ring-1 ring-teal-600 transition flex flex-col justify-between';
         } else {
-          card.className = 'text-left p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white transition flex flex-col justify-between opacity-85 hover:opacity-100';
+          card.className = 'text-left p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-white transition flex flex-col justify-between opacity-85 hover:opacity-100';
         }
       });
 
@@ -779,8 +753,8 @@
       const weightBoxTag = document.getElementById('weightBoxTag');
 
       if (apRisk === 'high') {
-        guidanceBanner.className = 'sm:col-span-7 rounded-lg bg-teal-50 border border-teal-200 p-3 text-xs text-teal-950 leading-relaxed';
-        guidanceBanner.innerHTML = `<strong>${apName} (High Risk):</strong> Co-commence metformin immediately regardless of baseline risk factors. Enter BMI/comorbidities below if checking <strong>GLP-1 agonist</strong> criteria (BMI &ge;30 or 27–30 + comorbidities), and complete Step 3 safety screen.`;
+        guidanceBanner.className = 'rounded-lg bg-teal-50 border border-teal-200 p-3.5 text-xs text-teal-950 leading-relaxed';
+        guidanceBanner.innerHTML = `<strong>High-Risk Tier (Olanzapine, Clozapine — Not First-Line):</strong> <strong>Strong recommendation</strong> to co-commence metformin immediately regardless of baseline risk factors. Enter BMI/comorbidities in Step 2 if checking <strong>GLP-1 agonist</strong> criteria (BMI &ge;30 or 27–30 + comorbidity), and complete Step 3 safety screen.`;
 
         riskFactorsBox.className = 'rounded-xl border border-slate-200 p-4 space-y-3 transition-all';
         rfBoxTag.textContent = 'Optional for High-Risk AP (checks GLP-1 eligibility)';
@@ -789,8 +763,8 @@
         weightTrajectoryBox.className = 'rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-3 transition-all';
         weightBoxTag.classList.add('hidden');
       } else if (apRisk === 'medium') {
-        guidanceBanner.className = 'sm:col-span-7 rounded-lg bg-amber-50 border border-amber-300 p-3 text-xs text-amber-950 leading-relaxed';
-        guidanceBanner.innerHTML = `<strong>${apName} (Medium Risk):</strong> Co-commence metformin immediately if the patient has <strong>&ge;1 baseline risk factor</strong> (Age 10–25, BMI &gt;25 [&gt;23 ethnicity-adjusted], HTN, dyslipidaemia, diabetes, pre-diabetes) OR <strong>&gt;3% weight gain</strong> in Year 1.`;
+        guidanceBanner.className = 'rounded-lg bg-amber-50 border border-amber-300 p-3.5 text-xs text-amber-950 leading-relaxed';
+        guidanceBanner.innerHTML = `<strong>Medium-Risk Tier (Quetiapine, Paliperidone, Risperidone):</strong> <strong>Conditional recommendation</strong> to co-commence metformin immediately if the patient has <strong>&ge;1 baseline risk factor</strong> (Age 18–25, BMI &gt;25 [&gt;23 ethnicity-adjusted], HTN, dyslipidaemia, diabetes, pre-diabetes) OR <strong>&gt;3% weight gain</strong> in Year 1.`;
 
         riskFactorsBox.className = 'rounded-xl border-2 border-amber-400 bg-amber-50/20 p-4 space-y-3 transition-all';
         rfBoxTag.textContent = 'Highlighted: Any 1 factor triggers immediate metformin';
@@ -799,8 +773,8 @@
         weightTrajectoryBox.className = 'rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-3 transition-all';
         weightBoxTag.classList.add('hidden');
       } else {
-        guidanceBanner.className = 'sm:col-span-7 rounded-lg bg-sky-50 border border-sky-200 p-3 text-xs text-sky-950 leading-relaxed';
-        guidanceBanner.innerHTML = `<strong>${apName} (Lower Risk):</strong> Immediate metformin is not routinely indicated at initiation unless meeting <strong>GLP-1 obesity criteria</strong>. Commence metformin if <strong>&gt;3% weight gain</strong> occurs during the first year.`;
+        guidanceBanner.className = 'rounded-lg bg-sky-50 border border-sky-200 p-3.5 text-xs text-sky-950 leading-relaxed';
+        guidanceBanner.innerHTML = `<strong>Lower-Risk Tier (All Other Antipsychotics):</strong> Immediate metformin is not routinely indicated at initiation unless meeting <strong>GLP-1 obesity criteria</strong>. <strong>Conditional recommendation</strong> to commence metformin if <strong>&gt;3% weight gain</strong> occurs during the first year.`;
 
         riskFactorsBox.className = 'rounded-xl border border-slate-200 p-4 space-y-3 transition-all';
         rfBoxTag.textContent = 'Checks GLP-1 eligibility if BMI 27–30';
@@ -815,12 +789,12 @@
      * Main decision-tree evaluation engine implementing Carolan et al. (2024).
      */
     function evaluateAlgorithm() {
-      // 1. Step 1: Antipsychotic Selection & Stage
-      const apRaw = document.getElementById('antipsychotic').value;
-      const [apName, apRisk] = apRaw.split('|');
+      // 1. Step 1: Antipsychotic Risk Tier & Stage
+      const apRisk = selectedApRisk;
+      const tierInfo = TIER_METADATA[apRisk];
       const timing = document.querySelector('input[name="timing"]:checked').value;
 
-      updateTierVisuals(apName, apRisk);
+      updateTierVisuals(apRisk);
 
       // 2. Step 2: Patient Profile, BMI & Cardiometabolic Criteria
       const ageGroup = document.querySelector('input[name="ageGroup"]:checked').value;
@@ -828,7 +802,6 @@
       const baselineWeight = parseFloat(document.getElementById('baselineWeight').value);
       const currentWeight = parseFloat(document.getElementById('currentWeight').value);
       const ethnicityBmi = document.getElementById('ethnicityBmi').checked;
-      const youthGrowthTrigger = document.getElementById('youthGrowthTrigger').checked;
 
       const rfHtn = document.getElementById('rf_htn').checked;
       const rfLipids = document.getElementById('rf_lipids').checked;
@@ -929,54 +902,66 @@
       if (bmi !== null && bmi > bmiThreshold) {
         mediumRiskFactors.push(`BMI ${bmi.toFixed(1)} kg/m² (>${bmiThreshold}${ethnicityBmi ? ' ethnicity-adjusted' : ''})`);
       }
-      if (ageGroup === '10to25') {
-        mediumRiskFactors.push('Age 10–25 years');
+      if (ageGroup === '18to25') {
+        mediumRiskFactors.push('Age 18–25 years');
       }
 
-      const weightGainTriggered = (pctWeightGain !== null && pctWeightGain > 3) || youthGrowthTrigger;
+      const weightGainTriggered = (pctWeightGain !== null && pctWeightGain > 3);
 
       // Update Right Sticky Decision Card
       const decisionCard = document.getElementById('decisionCard');
       const decisionHeader = document.getElementById('decisionHeader');
       const decisionBadge = document.getElementById('decisionBadge');
+      const gradeStrengthBadge = document.getElementById('gradeStrengthBadge');
       const decisionPathwayTag = document.getElementById('decisionPathwayTag');
       const decisionTitle = document.getElementById('decisionTitle');
       const decisionRationale = document.getElementById('decisionRationale');
       const decisionAlertBox = document.getElementById('decisionAlertBox');
+      const gradeExplainerBox = document.getElementById('gradeExplainerBox');
       const titrationCard = document.getElementById('titrationCard');
 
       let outcomeCode = '';
       let outcomeTitle = '';
+      let gradeStrengthLabel = '';
+      const timingText = timing === 'initiation' ? 'At Initiation / Switch' : 'Ongoing (Year 1)';
 
       // PRIORITY 1: Contraindicated / Avoid
       if (contraindications.length > 0) {
         outcomeCode = 'CONTRAINDICATED';
         outcomeTitle = 'Avoid Metformin — Contraindicated';
+        gradeStrengthLabel = 'Safety Contraindication';
         decisionCard.className = 'rounded-xl border-2 border-rose-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-rose-700 text-white px-5 py-4';
         decisionBadge.textContent = 'AVOID / DO NOT START';
-        decisionPathwayTag.textContent = 'Safety Exclusion';
+        gradeStrengthBadge.textContent = 'Safety Exclusion';
+        gradeStrengthBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-950/60 text-rose-100 border border-rose-400/30';
+        decisionPathwayTag.textContent = `${tierInfo.shortLabel} • ${timingText}`;
         decisionTitle.textContent = outcomeTitle;
 
         decisionRationale.innerHTML = [
           `<p class="font-semibold text-rose-900">Metformin must be avoided or withheld due to:</p>`,
           `<ul class="list-disc pl-5 space-y-1 text-slate-800">${contraindications.map(c => `<li>${c}</li>`).join('')}</ul>`,
-          `<p class="text-slate-600 pt-1">Provide lifestyle interventions (diet and exercise) and review antipsychotic choice if appropriate.</p>`
+          `<p class="text-slate-600 pt-1">Provide lifestyle interventions (diet and exercise) and review antipsychotic choice if clinically appropriate.</p>`
         ].join('');
 
         decisionAlertBox.classList.remove('hidden');
         decisionAlertBox.className = 'rounded-lg p-3.5 text-xs sm:text-sm border bg-rose-50 border-rose-200 text-rose-900';
         decisionAlertBox.innerHTML = `<strong>Clinical Action:</strong> Do not prescribe metformin. If acute physical illness or dehydration is transient, re-evaluate once resolved and eGFR is confirmed &ge;30 mL/min.`;
+
+        gradeExplainerBox.innerHTML = `<strong>Safety &amp; Off-Label Note:</strong> Metformin is contraindicated in severe renal impairment (eGFR &lt;30 mL/min), metabolic acidosis, hepatic insufficiency, or acute dehydrating illness due to lactic acidosis risk.`;
         titrationCard.classList.add('hidden');
       }
       // PRIORITY 2: Commence GLP-1 Agonist (with Metformin fallback if unavailable)
       else if (meetsGlp1Criteria) {
         outcomeCode = 'GLP1';
         outcomeTitle = 'Commence GLP-1 Agonist';
+        gradeStrengthLabel = 'GLP-1 Pathway (Metformin Fallback: Conditional)';
         decisionCard.className = 'rounded-xl border-2 border-indigo-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-indigo-700 text-white px-5 py-4';
         decisionBadge.textContent = 'GLP-1 PATHWAY';
-        decisionPathwayTag.textContent = 'Obesity / Comorbidity Criteria';
+        gradeStrengthBadge.textContent = 'Obesity / Comorbidity Criteria';
+        gradeStrengthBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-indigo-900 shadow-sm';
+        decisionPathwayTag.textContent = `${tierInfo.shortLabel} • ${timingText}`;
         decisionTitle.textContent = outcomeTitle;
 
         const bmiReason = bmi >= 30
@@ -991,61 +976,26 @@
         decisionAlertBox.classList.remove('hidden');
         decisionAlertBox.className = 'rounded-lg p-3.5 text-xs sm:text-sm border bg-teal-50 border-teal-300 text-teal-950';
         decisionAlertBox.innerHTML = `<strong>If Unavailable:</strong> If a GLP-1 agonist is unavailable, unaffordable, or not tolerated, <strong>commence metformin</strong> using the dose escalation schedule below.`;
+
+        gradeExplainerBox.innerHTML = `<strong>Terminology Note:</strong> If falling back to metformin for antipsychotic-induced weight gain, note that this is an <strong>unlicensed (off-label) indication</strong> and requires shared decision-making.`;
         titrationCard.classList.remove('hidden');
       }
-      // PRIORITY 3: Co-Commence Metformin Immediately (High Risk AP or Medium Risk AP + >=1 RF)
-      else if (apRisk === 'high' || (apRisk === 'medium' && mediumRiskFactors.length > 0)) {
-        outcomeCode = 'COCOMMENCE';
+      // PRIORITY 3A: Co-Commence Metformin Immediately — HIGH RISK AP (GRADE: STRONG)
+      else if (apRisk === 'high') {
+        outcomeCode = 'COCOMMENCE_HIGH';
         outcomeTitle = 'Co-Commence Metformin Immediately';
+        gradeStrengthLabel = 'Strong Recommendation (GRADE)';
         decisionCard.className = 'rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-teal-700 text-white px-5 py-4';
         decisionBadge.textContent = 'CO-COMMENCE METFORMIN';
-        decisionPathwayTag.textContent = timing === 'initiation' ? 'At Initiation / Switch' : 'Ongoing Therapy';
+        gradeStrengthBadge.textContent = 'GRADE: Strong Recommendation';
+        gradeStrengthBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-teal-900 shadow-sm';
+        decisionPathwayTag.textContent = `High-Risk AP (Olanzapine / Clozapine) • ${timingText}`;
         decisionTitle.textContent = outcomeTitle;
-
-        if (apRisk === 'high') {
-          decisionRationale.innerHTML = [
-            `<p><strong>${apName}</strong> is a <strong>High-Risk antipsychotic</strong> (note: not first-line).</p>`,
-            `<p>Co-commence metformin immediately alongside lifestyle interventions (diet and exercise) without waiting for weight gain to develop.</p>`
-          ].join('');
-        } else {
-          decisionRationale.innerHTML = [
-            `<p><strong>${apName}</strong> is a <strong>Medium-Risk antipsychotic</strong> and the patient has <strong>&ge;1 baseline risk factor</strong>:</p>`,
-            `<ul class="list-disc pl-5 space-y-1 font-medium text-slate-800">${mediumRiskFactors.map(r => `<li>${r}</li>`).join('')}</ul>`,
-            `<p>Co-commence metformin immediately alongside lifestyle interventions (diet and exercise).</p>`
-          ].join('');
-        }
-
-        if (egfr === '30to44') {
-          decisionAlertBox.classList.remove('hidden');
-          decisionAlertBox.className = 'rounded-lg p-3.5 text-xs sm:text-sm border bg-amber-50 border-amber-300 text-amber-950';
-          decisionAlertBox.innerHTML = `<strong>Renal Dose Cap:</strong> Because eGFR is <strong>30–44 mL/min</strong>, cap maximum metformin dose at <strong>1 g/day</strong>.`;
-        } else {
-          decisionAlertBox.classList.add('hidden');
-        }
-        titrationCard.classList.remove('hidden');
-      }
-      // PRIORITY 4: Commence Metformin (>3% weight gain during Year 1)
-      else if (weightGainTriggered) {
-        outcomeCode = 'WEIGHT_TRIGGER';
-        outcomeTitle = 'Commence Metformin (>3% Weight Gain)';
-        decisionCard.className = 'rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all';
-        decisionHeader.className = 'bg-teal-700 text-white px-5 py-4';
-        decisionBadge.textContent = 'COMMENCE METFORMIN';
-        decisionPathwayTag.textContent = 'Year 1 Weight Gain Trigger';
-        decisionTitle.textContent = outcomeTitle;
-
-        const triggerReasons = [];
-        if (pctWeightGain !== null && pctWeightGain > 3) {
-          triggerReasons.push(`Patient gained <strong>+${pctWeightGain.toFixed(1)}%</strong> (${(currentWeight - baselineWeight).toFixed(1)} kg) from baseline, exceeding the <strong>&gt;3% first-year threshold</strong>.`);
-        }
-        if (youthGrowthTrigger) {
-          triggerReasons.push(`Young person with <strong>&gt;3% weight gain outside expected growth trajectory</strong>.`);
-        }
 
         decisionRationale.innerHTML = [
-          `<p>${triggerReasons.join(' ')}</p>`,
-          `<p>Commence metformin now and continue lifestyle interventions (diet and exercise).</p>`
+          `<p><strong>Olanzapine and clozapine</strong> carry the highest risk of rapid, clinically significant weight gain (reserved as <strong>non-first-line</strong> antipsychotics).</p>`,
+          `<p>Co-commence metformin immediately alongside structured lifestyle interventions (diet and exercise) without waiting for weight gain to develop.</p>`
         ].join('');
 
         if (egfr === '30to44') {
@@ -1055,16 +1005,80 @@
         } else {
           decisionAlertBox.classList.add('hidden');
         }
+
+        gradeExplainerBox.innerHTML = `<strong>What this means:</strong> A <strong>Strong Recommendation</strong> indicates high confidence that early metformin benefits outweigh risks for almost all patients starting olanzapine/clozapine. <em>"Not first line"</em> reminds prescribers not to choose olanzapine/clozapine initially when lower-risk antipsychotics are suitable. Metformin is <strong>unlicensed (off-label)</strong> for AIWG.`;
+        titrationCard.classList.remove('hidden');
+      }
+      // PRIORITY 3B: Co-Commence Metformin Immediately — MEDIUM RISK AP + >=1 RF (GRADE: CONDITIONAL)
+      else if (apRisk === 'medium' && mediumRiskFactors.length > 0) {
+        outcomeCode = 'COCOMMENCE_MEDIUM';
+        outcomeTitle = 'Co-Commence Metformin Immediately';
+        gradeStrengthLabel = 'Conditional Recommendation (GRADE)';
+        decisionCard.className = 'rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all';
+        decisionHeader.className = 'bg-teal-700 text-white px-5 py-4';
+        decisionBadge.textContent = 'CO-COMMENCE METFORMIN';
+        gradeStrengthBadge.textContent = 'GRADE: Conditional Recommendation';
+        gradeStrengthBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-950 shadow-sm';
+        decisionPathwayTag.textContent = `Medium-Risk AP (Quetiapine / Paliperidone / Risperidone) • ${timingText}`;
+        decisionTitle.textContent = outcomeTitle;
+
+        decisionRationale.innerHTML = [
+          `<p>For <strong>medium-risk antipsychotics</strong>, co-commencement is recommended because the patient has <strong>&ge;1 baseline risk factor</strong>:</p>`,
+          `<ul class="list-disc pl-5 space-y-1 font-medium text-slate-800">${mediumRiskFactors.map(r => `<li>${r}</li>`).join('')}</ul>`,
+          `<p>Co-commence metformin alongside lifestyle interventions (diet and exercise).</p>`
+        ].join('');
+
+        if (egfr === '30to44') {
+          decisionAlertBox.classList.remove('hidden');
+          decisionAlertBox.className = 'rounded-lg p-3.5 text-xs sm:text-sm border bg-amber-50 border-amber-300 text-amber-950';
+          decisionAlertBox.innerHTML = `<strong>Renal Dose Cap:</strong> Because eGFR is <strong>30–44 mL/min</strong>, cap maximum metformin dose at <strong>1 g/day</strong>.`;
+        } else {
+          decisionAlertBox.classList.add('hidden');
+        }
+
+        gradeExplainerBox.innerHTML = `<strong>What this means:</strong> A <strong>Conditional Recommendation</strong> means benefits likely outweigh risks in patients with baseline cardiometabolic/demographic risk factors, though clinicians should weigh pill burden and patient preference via shared decision-making. Metformin is <strong>unlicensed (off-label)</strong> for AIWG.`;
+        titrationCard.classList.remove('hidden');
+      }
+      // PRIORITY 4: Commence Metformin (>3% weight gain during Year 1 — GRADE: CONDITIONAL)
+      else if (weightGainTriggered) {
+        outcomeCode = 'WEIGHT_TRIGGER';
+        outcomeTitle = 'Commence Metformin (>3% Weight Gain)';
+        gradeStrengthLabel = 'Conditional Recommendation (GRADE)';
+        decisionCard.className = 'rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all';
+        decisionHeader.className = 'bg-teal-700 text-white px-5 py-4';
+        decisionBadge.textContent = 'COMMENCE METFORMIN';
+        gradeStrengthBadge.textContent = 'GRADE: Conditional Recommendation';
+        gradeStrengthBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-950 shadow-sm';
+        decisionPathwayTag.textContent = `${tierInfo.shortLabel} • Year 1 Weight Gain Trigger`;
+        decisionTitle.textContent = outcomeTitle;
+
+        decisionRationale.innerHTML = [
+          `<p>Patient gained <strong>+${pctWeightGain.toFixed(1)}%</strong> (${(currentWeight - baselineWeight).toFixed(1)} kg) from baseline, exceeding the <strong>&gt;3% first-year threshold</strong>.</p>`,
+          `<p>Commence metformin now and continue structured lifestyle interventions (diet and exercise).</p>`
+        ].join('');
+
+        if (egfr === '30to44') {
+          decisionAlertBox.classList.remove('hidden');
+          decisionAlertBox.className = 'rounded-lg p-3.5 text-xs sm:text-sm border bg-amber-50 border-amber-300 text-amber-950';
+          decisionAlertBox.innerHTML = `<strong>Renal Dose Cap:</strong> Because eGFR is <strong>30–44 mL/min</strong>, cap maximum metformin dose at <strong>1 g/day</strong>.`;
+        } else {
+          decisionAlertBox.classList.add('hidden');
+        }
+
+        gradeExplainerBox.innerHTML = `<strong>What this means:</strong> A <strong>Conditional Recommendation</strong> supports early intervention once &gt;3% weight gain emerges in Year 1, tailored to individual preferences and GI tolerance. Metformin is <strong>unlicensed (off-label)</strong> for AIWG.`;
         titrationCard.classList.remove('hidden');
       }
       // PRIORITY 5: Lifestyle Interventions & Monitor
       else {
         outcomeCode = 'MONITOR';
         outcomeTitle = 'Lifestyle Interventions & Monitor Weight';
+        gradeStrengthLabel = 'Lifestyle & Surveillance';
         decisionCard.className = 'rounded-xl border-2 border-sky-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-sky-700 text-white px-5 py-4';
         decisionBadge.textContent = 'LIFESTYLE & MONITOR';
-        decisionPathwayTag.textContent = 'Criteria Not Currently Met';
+        gradeStrengthBadge.textContent = 'Prophylaxis Not Indicated Yet';
+        gradeStrengthBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-sky-900 shadow-sm';
+        decisionPathwayTag.textContent = `${tierInfo.shortLabel} • ${timingText}`;
         decisionTitle.textContent = outcomeTitle;
 
         const thresholdNote = (!isNaN(baselineWeight) && baselineWeight > 0)
@@ -1072,11 +1086,12 @@
           : `Enter baseline weight in Step 2 to calculate the exact <strong>&gt;3% Year 1 trigger</strong>.`;
 
         decisionRationale.innerHTML = [
-          `<p><strong>${apName}</strong> (${apRisk === 'medium' ? 'Medium Risk without baseline risk factors' : 'Lower Risk'}) does not currently meet criteria for immediate metformin or GLP-1 therapy.</p>`,
-          `<p><strong>Action:</strong> Provide lifestyle interventions (diet and exercise) and monitor weight closely during Year 1. ${thresholdNote}</p>`
+          `<p><strong>${tierInfo.label}</strong> ${apRisk === 'medium' ? 'without baseline risk factors' : ''} does not currently meet criteria for immediate metformin or GLP-1 therapy.</p>`,
+          `<p><strong>Action:</strong> Provide structured lifestyle interventions (diet and exercise) and monitor weight closely during Year 1. ${thresholdNote}</p>`
         ].join('');
 
         decisionAlertBox.classList.add('hidden');
+        gradeExplainerBox.innerHTML = `<strong>Clinical Pearl:</strong> Lifestyle interventions (diet and exercise) should be offered to all patients starting antipsychotic therapy. Re-assess immediately if weight increases by &gt;3% during Year 1.`;
         titrationCard.classList.add('hidden');
       }
 
@@ -1146,7 +1161,7 @@
       generateClinicalNote({
         egfr,
         contraindications,
-        apName,
+        tierInfo,
         apRisk,
         timing,
         ageGroup,
@@ -1159,6 +1174,7 @@
         glp1Comorbidities,
         outcomeCode,
         outcomeTitle,
+        gradeStrengthLabel,
         renalFreq: renal6MonthlyReasons.length > 0 ? 'Every 6 months' : 'Annually',
         b12Freq: b126MonthlyReasons.length > 0 ? 'Every 6 months' : 'Annually'
       });
@@ -1169,7 +1185,7 @@
      */
     function generateClinicalNote(data) {
       const egfrLabel = data.egfr === 'ge45' ? '>=45 mL/min' : (data.egfr === '30to44' ? '30-44 mL/min (Max 1g/day)' : '<30 mL/min');
-      const ageLabel = data.ageGroup === '10to25' ? '10-25 years' : (data.ageGroup === '26to75' ? '26-75 years' : '>75 years');
+      const ageLabel = data.ageGroup === '18to25' ? '18-25 years' : (data.ageGroup === '26to75' ? '26-75 years' : '>75 years');
       const timingLabel = data.timing === 'initiation' ? 'Initiating / Switching' : 'Ongoing (Year 1)';
 
       let anthroLine = `Age Group: ${ageLabel}`;
@@ -1191,7 +1207,7 @@
         planLines.push(data.egfr === '30to44'
           ? `  Dose escalation (Renal Cap Max 1g/day): Wk 1: 500mg AM with food -> Wk 2+: 500mg AM + 500mg PM.`
           : `  Dose escalation: Wk 1: 500mg AM -> Wk 2: 500mg BD -> Wk 4: 1g AM + 500mg PM -> Wk 6+: 1g BD with food (or MR once daily).`);
-      } else if (data.outcomeCode === 'COCOMMENCE' || data.outcomeCode === 'WEIGHT_TRIGGER') {
+      } else if (data.outcomeCode === 'COCOMMENCE_HIGH' || data.outcomeCode === 'COCOMMENCE_MEDIUM' || data.outcomeCode === 'WEIGHT_TRIGGER') {
         planLines.push(`- Commence Metformin (unlicensed/off-label indication for AIWG) + lifestyle interventions.`);
         planLines.push(data.egfr === '30to44'
           ? `- Dose escalation (Renal Cap Max 1g/day): Wk 1: 500mg AM with food -> Wk 2+: 500mg AM + 500mg PM (check efficacy at Wk 2).`
@@ -1209,12 +1225,12 @@
       const note = [
         `AIWG METABOLIC PROPHYLAXIS ASSESSMENT (Carolan et al., Schizophrenia Bulletin 2024)`,
         `--------------------------------------------------------------------------------`,
-        `Antipsychotic: ${data.apName} (${data.apRisk.toUpperCase()} risk) | Stage: ${timingLabel}`,
+        `Antipsychotic Risk Tier: ${data.tierInfo.label} | Stage: ${timingLabel}`,
         anthroLine,
         `Cardiometabolic Risk Factors: ${rfList}`,
         `Pre-treatment eGFR: ${egfrLabel} | Contraindications: ${data.contraindications.length > 0 ? data.contraindications.join(', ') : 'None'}`,
         ``,
-        `RECOMMENDATION: ${data.outcomeTitle.toUpperCase()}`,
+        `RECOMMENDATION: ${data.outcomeTitle.toUpperCase()} [${data.gradeStrengthLabel}]`,
         ...planLines
       ].join('\n');
 
@@ -1260,7 +1276,7 @@
     }
 
     function resetForm() {
-      document.getElementById('antipsychotic').value = 'Olanzapine|high';
+      selectedApRisk = 'high';
       document.querySelector('input[name="timing"][value="initiation"]').checked = true;
       document.querySelector('input[name="ageGroup"][value="26to75"]').checked = true;
       document.getElementById('heightCm').value = '';
@@ -1268,30 +1284,31 @@
       document.getElementById('currentWeight').value = '';
       document.querySelector('input[name="egfr"][value="ge45"]').checked = true;
       ['ci_acidosis', 'ci_hepatic', 'ci_illness', 'ci_alcohol', 'ci_lowbmi',
-       'ethnicityBmi', 'youthGrowthTrigger',
+       'ethnicityBmi',
        'rf_htn', 'rf_lipids', 'rf_diabetes', 'rf_prediabetes', 'rf_osa',
        'mon_renal', 'mon_b12'].forEach(id => {
-        document.getElementById(id).checked = false;
+        const el = document.getElementById(id);
+        if (el) el.checked = false;
       });
       evaluateAlgorithm();
     }
 
     function loadPreset(presetKey) {
       resetForm();
-      if (presetKey === 'olanzapine22') {
-        document.getElementById('antipsychotic').value = 'Olanzapine|high';
-        document.querySelector('input[name="ageGroup"][value="10to25"]').checked = true;
+      if (presetKey === 'high22') {
+        selectedApRisk = 'high';
+        document.querySelector('input[name="ageGroup"][value="18to25"]').checked = true;
         document.getElementById('heightCm').value = '175';
         document.getElementById('baselineWeight').value = '66';
-      } else if (presetKey === 'risperidone45') {
-        document.getElementById('antipsychotic').value = 'Risperidone|medium';
+      } else if (presetKey === 'medium45') {
+        selectedApRisk = 'medium';
         document.querySelector('input[name="ageGroup"][value="26to75"]').checked = true;
         document.getElementById('heightCm').value = '168';
         document.getElementById('baselineWeight').value = '74';
         document.getElementById('rf_prediabetes').checked = true;
         document.getElementById('ethnicityBmi').checked = true;
-      } else if (presetKey === 'aripiprazole38') {
-        document.getElementById('antipsychotic').value = 'Aripiprazole|lower';
+      } else if (presetKey === 'lower38') {
+        selectedApRisk = 'lower';
         document.querySelector('input[name="ageGroup"][value="26to75"]').checked = true;
         document.getElementById('heightCm').value = '170';
         document.getElementById('baselineWeight').value = '90';
