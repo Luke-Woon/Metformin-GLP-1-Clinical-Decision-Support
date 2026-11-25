@@ -333,15 +333,7 @@
 
               <div id="rfCheckboxesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
-                  <input type="checkbox" id="rf_htn" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
-                  <span class="text-xs sm:text-sm text-slate-800 font-medium">Hypertension</span>
-                </label>
-                <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
-                  <input type="checkbox" id="rf_lipids" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
-                  <span class="text-xs sm:text-sm text-slate-800 font-medium">Dyslipidaemia</span>
-                </label>
-                <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
-                  <input type="checkbox" id="rf_diabetes" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
+                  <input type="checkbox" id="rf_diabetes" onchange="handleDiabetesChange()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                   <span class="text-xs sm:text-sm text-slate-800 font-medium">Diabetes (Type 1 or 2)</span>
                 </label>
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
@@ -356,6 +348,17 @@
                   <div>
                     <span class="text-xs sm:text-sm text-slate-800 font-medium">Pre-diabetes</span>
                     <span class="block text-xs text-slate-500">HbA1c 42–47 mmol/mol OR Fasting glucose 6.1–6.9 mmol/L</span>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Always-Accessible Safeguard: Already Taking Metformin for Diabetes -->
+              <div class="pt-2 border-t border-slate-200/80">
+                <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-amber-200/90 bg-amber-50/60 hover:bg-amber-50 cursor-pointer transition">
+                  <input type="checkbox" id="alreadyOnMetformin" onchange="handleAlreadyOnMetforminChange()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
+                  <div>
+                    <span class="text-xs sm:text-sm text-slate-900 font-semibold">Patient is already taking metformin for diabetes</span>
+                    <span class="block text-[11px] text-amber-900">Avoid duplicate prescribing; evaluates GLP-1 eligibility &amp; dose optimization up to 1–2 g/day</span>
                   </div>
                 </label>
               </div>
@@ -526,13 +529,18 @@
         <!-- 2. Dose Escalation Schedule Card -->
         <div id="titrationCard" class="bg-white rounded-xl border border-slate-200 card-shadow overflow-hidden">
           <div class="bg-slate-50 px-5 py-3.5 border-b border-slate-200 flex items-center justify-between">
-            <h3 class="text-sm font-bold text-slate-800">Metformin Dose Escalation</h3>
+            <h3 id="titrationCardTitle" class="text-sm font-bold text-slate-800">Metformin Dose Escalation</h3>
             <span id="maxDoseBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
               Target: 1–2 g/day
             </span>
           </div>
 
           <div class="p-5 space-y-3.5">
+            <!-- Existing Metformin Therapy Notice (Visible only if alreadyOnMetformin is checked) -->
+            <div id="existingMetforminBanner" class="hidden rounded-lg bg-sky-50 border border-sky-300 p-3 text-xs text-sky-950">
+              <strong>Existing Diabetes Therapy Safeguard:</strong> Do <strong>not</strong> initiate a duplicate metformin prescription. Review current total daily dose and consider titrating up toward the <strong>1–2 g/day</strong> target (or max 1 g/day if GFR 30–44 mL/min) in coordination with diabetes care.
+            </div>
+
             <!-- Renal Dose Cap Warning (Visible only if GFR 30-44) -->
             <div id="renalCapWarning" class="hidden rounded-lg bg-amber-50 border border-amber-300 p-3 text-xs text-amber-900">
               <strong>Special Considerations (GFR 30–44 mL/min):</strong> Maximum total daily dose is <strong>1g/day</strong> (500 mg morning and 500 mg evening). Do not escalate to Week 4 or Week 6.
@@ -763,6 +771,30 @@
     window.overrideComorbidityHide = overrideComorbidityHide;
 
     /**
+     * Synchronizes Diabetes checkbox when "Already taking metformin for diabetes" is toggled.
+     */
+    function handleAlreadyOnMetforminChange() {
+      const alreadyOn = document.getElementById('alreadyOnMetformin').checked;
+      if (alreadyOn) {
+        document.getElementById('rf_diabetes').checked = true;
+      }
+      evaluateAlgorithm();
+    }
+    window.handleAlreadyOnMetforminChange = handleAlreadyOnMetforminChange;
+
+    /**
+     * Ensures consistency if Diabetes is unchecked after "Already taking metformin" was selected.
+     */
+    function handleDiabetesChange() {
+      const hasDiabetes = document.getElementById('rf_diabetes').checked;
+      if (!hasDiabetes) {
+        document.getElementById('alreadyOnMetformin').checked = false;
+      }
+      evaluateAlgorithm();
+    }
+    window.handleDiabetesChange = handleDiabetesChange;
+
+    /**
      * Evaluates all inputs against Carolan et al. (2024) clinical decision rules
      * and updates UI cards, warnings, monitoring intervals, and EMR note output.
      */
@@ -778,12 +810,13 @@
       const ethnicityBmi = document.getElementById('ethnicityBmi').checked;
       const youngPersonTrajectory = document.getElementById('youngPersonTrajectory').checked;
 
-      // Cardiometabolic risk factors
+      // Cardiometabolic risk factors & existing diabetes therapy
       const rfHtn = document.getElementById('rf_htn').checked;
       const rfLipids = document.getElementById('rf_lipids').checked;
       const rfDiabetes = document.getElementById('rf_diabetes').checked;
       const rfPrediabetes = document.getElementById('rf_prediabetes').checked;
       const rfOsa = document.getElementById('rf_osa').checked;
+      const alreadyOnMetformin = document.getElementById('alreadyOnMetformin').checked;
 
       // Contraindications ("Avoid metformin with")
       const ciAcidosis = document.getElementById('ci_acidosis').checked;
@@ -999,33 +1032,52 @@
       if (actionType === 'contraindicated') {
         decisionCard.className = 'rounded-xl border-2 border-rose-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-rose-700 text-white px-5 py-4';
-        decisionBadge.textContent = 'AVOID / STOP METFORMIN';
-        decisionTitle.textContent = 'Do Not Commence Metformin (Contraindicated)';
 
-        rationaleHtml = `
-          <p>Metformin must be <strong>avoided or stopped</strong> due to the following active exclusion criteria:</p>
-          <ul class="list-disc pl-5 space-y-1 font-medium text-rose-900">
-            ${contraindications.map(c => `<li>${c}</li>`).join('')}
-          </ul>
-          <p class="pt-1">Continue non-pharmacological <strong>lifestyle interventions (diet and exercise)</strong> and review antipsychotic choice if clinically appropriate.</p>
-        `;
+        if (alreadyOnMetformin) {
+          decisionBadge.textContent = 'REVIEW / HOLD EXISTING METFORMIN';
+          decisionTitle.textContent = 'Review & Hold Existing Metformin (Contraindicated)';
+          rationaleHtml = `
+            <p>Patient is already prescribed metformin for diabetes, but an active <strong>exclusion or discontinuation threshold</strong> is present:</p>
+            <ul class="list-disc pl-5 space-y-1 font-medium text-rose-900">
+              ${contraindications.map(c => `<li>${c}</li>`).join('')}
+            </ul>
+            <p class="pt-1"><strong>Hold/review existing metformin immediately</strong> in coordination with diabetes care, continue <strong>lifestyle interventions (diet and exercise)</strong>, and review antipsychotic choice.</p>
+          `;
+        } else {
+          decisionBadge.textContent = 'AVOID / STOP METFORMIN';
+          decisionTitle.textContent = 'Do Not Commence Metformin (Contraindicated)';
+          rationaleHtml = `
+            <p>Metformin must be <strong>avoided or stopped</strong> due to the following active exclusion criteria:</p>
+            <ul class="list-disc pl-5 space-y-1 font-medium text-rose-900">
+              ${contraindications.map(c => `<li>${c}</li>`).join('')}
+            </ul>
+            <p class="pt-1">Continue non-pharmacological <strong>lifestyle interventions (diet and exercise)</strong> and review antipsychotic choice if clinically appropriate.</p>
+          `;
+        }
       } else if (actionType === 'glp1') {
         decisionCard.className = 'rounded-xl border-2 border-indigo-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-indigo-700 text-white px-5 py-4';
         decisionBadge.textContent = 'COMMENCE GLP-1 AGONIST';
-        decisionTitle.textContent = 'Commence GLP-1 Agonist (Fallback: Metformin)';
+        decisionTitle.textContent = alreadyOnMetformin
+          ? 'Commence GLP-1 Agonist (Continue Existing Metformin)'
+          : 'Commence GLP-1 Agonist (Fallback: Metformin)';
 
         const glpReason = bmi >= 30
           ? `BMI is <strong>${bmi.toFixed(1)} kg/m&sup2; (&ge;30 kg/m&sup2;)</strong>.`
           : `BMI is <strong>${bmi.toFixed(1)} kg/m&sup2; (27–30 kg/m&sup2;)</strong> with qualifying comorbidity: <strong>${glp1ComorbiditiesMet.join(', ')}</strong>.`;
 
-        rationaleHtml = `
-          <p>${glpReason} Per Carolan et al. (2024), this patient meets criteria to <strong>commence a GLP-1 Agonist</strong> alongside lifestyle interventions (diet &amp; exercise).</p>
-        `;
+        rationaleHtml = alreadyOnMetformin
+          ? `<p>${glpReason} Per Carolan et al. (2024), this patient meets criteria to <strong>commence a GLP-1 Agonist</strong> alongside lifestyle interventions (diet &amp; exercise) while <strong>continuing existing metformin</strong> in coordination with diabetes care (do not add a duplicate metformin prescription).</p>`
+          : `<p>${glpReason} Per Carolan et al. (2024), this patient meets criteria to <strong>commence a GLP-1 Agonist</strong> alongside lifestyle interventions (diet &amp; exercise).</p>`;
 
         if (isMetforminContraindicated) {
           alertClass = 'rounded-lg p-3.5 text-xs sm:text-sm border border-rose-300 bg-rose-50 text-rose-950';
-          alertHtml = `<strong>Note on Metformin Fallback:</strong> Metformin is contraindicated in this patient (${contraindications.join('; ')}). Ensure GLP-1 Agonist access is prioritized.`;
+          alertHtml = alreadyOnMetformin
+            ? `<strong>Safety Alert on Existing Metformin:</strong> Active contraindication/stop threshold detected (${contraindications.join('; ')}). Review/hold existing metformin with diabetes care while prioritizing GLP-1 Agonist therapy.`
+            : `<strong>Note on Metformin Fallback:</strong> Metformin is contraindicated in this patient (${contraindications.join('; ')}). Ensure GLP-1 Agonist access is prioritized.`;
+        } else if (alreadyOnMetformin) {
+          alertClass = 'rounded-lg p-3.5 text-xs sm:text-sm border border-sky-300 bg-sky-50 text-sky-950';
+          alertHtml = `<strong>If GLP-1 Agonist Is Unavailable:</strong> Continue existing metformin (avoid duplicate prescribing) and consider titrating current dose up toward the <strong>1–2 g/day target</strong>${egfr === '30to44' ? ' (capped at 1 g/day due to GFR 30–44 mL/min)' : ''} if sub-therapeutic.`;
         } else {
           alertClass = 'rounded-lg p-3.5 text-xs sm:text-sm border border-teal-300 bg-teal-50 text-teal-950';
           alertHtml = `<strong>Guideline Fallback Rule ("If unavailable"):</strong> If a GLP-1 Agonist is unavailable, <strong>commence metformin</strong> instead using the titration schedule below.`;
@@ -1033,52 +1085,86 @@
       } else if (actionType === 'cocommence') {
         decisionCard.className = 'rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-teal-700 text-white px-5 py-4';
-        decisionBadge.textContent = 'CO-COMMENCE METFORMIN';
-        decisionTitle.textContent = 'Co-Commence Metformin Immediately';
 
-        if (selectedApRisk === 'high') {
+        if (alreadyOnMetformin) {
+          decisionBadge.textContent = 'CONTINUE / OPTIMIZE METFORMIN';
+          decisionTitle.textContent = 'Continue Existing Metformin & Optimize Dose';
+
+          const triggerText = selectedApRisk === 'high'
+            ? `prescribed a <strong>High-Risk antipsychotic (${TIER_METADATA.high.examples})</strong>`
+            : `prescribed a <strong>Medium-Risk antipsychotic (${TIER_METADATA.medium.examples})</strong> with qualifying criteria (<strong>${mediumRiskCriteriaMet.join(', ')}</strong>)`;
+
           rationaleHtml = `
-            <p>Patient is prescribed a <strong>High-Risk antipsychotic (${TIER_METADATA.high.examples})</strong>. Co-commence metformin immediately at initiation or switch alongside <strong>lifestyle interventions (diet and exercise)</strong>.</p>
+            <p>Patient is ${triggerText} and is <strong>already taking metformin for diabetes</strong>.</p>
+            <p><strong>Avoid duplicate prescribing:</strong> Continue existing metformin therapy, verify current total daily dose, and consider titrating up toward the <strong>1–2 g/day target</strong>${egfr === '30to44' ? ' (max 1 g/day due to GFR 30–44 mL/min)' : ''} in coordination with diabetes care alongside <strong>lifestyle interventions (diet and exercise)</strong>.</p>
           `;
         } else {
-          rationaleHtml = `
-            <p>Patient is prescribed a <strong>Medium-Risk antipsychotic (${TIER_METADATA.medium.examples})</strong> and meets &ge;1 co-commencement criterion:</p>
-            <ul class="list-disc pl-5 space-y-1 font-medium text-teal-900">
-              ${mediumRiskCriteriaMet.map(c => `<li>${c}</li>`).join('')}
-            </ul>
-            <p class="pt-1">Co-commence metformin immediately alongside <strong>lifestyle interventions (diet and exercise)</strong>.</p>
-          `;
+          decisionBadge.textContent = 'CO-COMMENCE METFORMIN';
+          decisionTitle.textContent = 'Co-Commence Metformin Immediately';
+
+          if (selectedApRisk === 'high') {
+            rationaleHtml = `
+              <p>Patient is prescribed a <strong>High-Risk antipsychotic (${TIER_METADATA.high.examples})</strong>. Co-commence metformin immediately at initiation or switch alongside <strong>lifestyle interventions (diet and exercise)</strong>.</p>
+            `;
+          } else {
+            rationaleHtml = `
+              <p>Patient is prescribed a <strong>Medium-Risk antipsychotic (${TIER_METADATA.medium.examples})</strong> and meets &ge;1 co-commencement criterion:</p>
+              <ul class="list-disc pl-5 space-y-1 font-medium text-teal-900">
+                ${mediumRiskCriteriaMet.map(c => `<li>${c}</li>`).join('')}
+              </ul>
+              <p class="pt-1">Co-commence metformin immediately alongside <strong>lifestyle interventions (diet and exercise)</strong>.</p>
+            `;
+          }
         }
       } else if (actionType === 'commence') {
         decisionCard.className = 'rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-teal-700 text-white px-5 py-4';
-        decisionBadge.textContent = 'COMMENCE METFORMIN';
-        decisionTitle.textContent = 'Commence Metformin (Year 1 Weight Gain Trigger)';
 
         const gainDesc = (pctGain !== null && pctGain > 3.0)
           ? `<strong>+${pctGain.toFixed(1)}% weight gain (+${kgGain.toFixed(1)} kg)</strong> during Year 1`
           : `<strong>&gt;3% weight gained outside expected growth trajectory</strong> during Year 1`;
 
-        rationaleHtml = `
-          <p>Patient has experienced ${gainDesc} on a <strong>${TIER_METADATA[selectedApRisk].shortLabel}</strong>. Per Carolan et al. (2024), <strong>commence metformin</strong> and continue <strong>lifestyle interventions (diet and exercise)</strong>.</p>
-        `;
+        if (alreadyOnMetformin) {
+          decisionBadge.textContent = 'CONTINUE / OPTIMIZE METFORMIN';
+          decisionTitle.textContent = 'Continue Existing Metformin & Optimize Dose (Year 1 Gain)';
+          rationaleHtml = `
+            <p>Patient has experienced ${gainDesc} on a <strong>${TIER_METADATA[selectedApRisk].shortLabel}</strong> while <strong>already taking metformin for diabetes</strong>.</p>
+            <p><strong>Avoid duplicate prescribing:</strong> Continue existing metformin, review current dose, and consider titrating up toward the <strong>1–2 g/day target</strong>${egfr === '30to44' ? ' (max 1 g/day due to GFR 30–44 mL/min)' : ''} with diabetes care alongside <strong>lifestyle interventions (diet and exercise)</strong>.</p>
+          `;
+        } else {
+          decisionBadge.textContent = 'COMMENCE METFORMIN';
+          decisionTitle.textContent = 'Commence Metformin (Year 1 Weight Gain Trigger)';
+          rationaleHtml = `
+            <p>Patient has experienced ${gainDesc} on a <strong>${TIER_METADATA[selectedApRisk].shortLabel}</strong>. Per Carolan et al. (2024), <strong>commence metformin</strong> and continue <strong>lifestyle interventions (diet and exercise)</strong>.</p>
+          `;
+        }
       } else {
         // Monitor / Lifestyle Interventions
         decisionCard.className = 'rounded-xl border-2 border-sky-600 bg-white card-shadow overflow-hidden transition-all';
         decisionHeader.className = 'bg-sky-700 text-white px-5 py-4';
-        decisionBadge.textContent = 'LIFESTYLE & MONITOR WEIGHT';
-        decisionTitle.textContent = 'Lifestyle Interventions & Year 1 Weight Monitoring';
 
-        if (selectedApRisk === 'medium') {
+        if (alreadyOnMetformin) {
+          decisionBadge.textContent = 'CONTINUE METFORMIN & MONITOR';
+          decisionTitle.textContent = 'Continue Existing Metformin & Monitor Year 1 Weight';
           rationaleHtml = `
-            <p>Patient is on a <strong>Medium-Risk antipsychotic (${TIER_METADATA.medium.examples})</strong> with <strong>no baseline risk factors</strong> currently selected (Hypertension, Dyslipidaemia, Diabetes, Pre-diabetes, BMI &gt;${bmiOverweightThreshold} kg/m&sup2;, or Age 10–25).</p>
-            <p>Provide <strong>lifestyle interventions (diet and exercise)</strong> and monitor weight closely. Commence metformin immediately if <strong>&gt;3% weight is gained</strong> at any time during the first year.</p>
+            <p>Patient is on a <strong>${TIER_METADATA[selectedApRisk].shortLabel}</strong> without &gt;3% Year 1 weight gain recorded and is <strong>already taking metformin for diabetes</strong>.</p>
+            <p>Continue existing diabetes regimen (avoid duplicate prescribing), provide <strong>lifestyle interventions (diet and exercise)</strong>, and monitor weight closely. Review metformin dose optimization up toward <strong>1–2 g/day</strong> if <strong>&gt;3% weight is gained</strong> in Year 1.</p>
           `;
         } else {
-          rationaleHtml = `
-            <p>Patient is on a <strong>Lower-Risk antipsychotic (All other antipsychotics)</strong> without &gt;3% Year 1 weight gain recorded.</p>
-            <p>Provide <strong>lifestyle interventions (diet and exercise)</strong> and monitor weight regularly. Commence metformin if <strong>&gt;3% weight is gained</strong> at any time during the first year.</p>
-          `;
+          decisionBadge.textContent = 'LIFESTYLE & MONITOR WEIGHT';
+          decisionTitle.textContent = 'Lifestyle Interventions & Year 1 Weight Monitoring';
+
+          if (selectedApRisk === 'medium') {
+            rationaleHtml = `
+              <p>Patient is on a <strong>Medium-Risk antipsychotic (${TIER_METADATA.medium.examples})</strong> with <strong>no baseline risk factors</strong> currently selected (Hypertension, Dyslipidaemia, Diabetes, Pre-diabetes, BMI &gt;${bmiOverweightThreshold} kg/m&sup2;, or Age 10–25).</p>
+              <p>Provide <strong>lifestyle interventions (diet and exercise)</strong> and monitor weight closely. Commence metformin immediately if <strong>&gt;3% weight is gained</strong> at any time during the first year.</p>
+            `;
+          } else {
+            rationaleHtml = `
+              <p>Patient is on a <strong>Lower-Risk antipsychotic (All other antipsychotics)</strong> without &gt;3% Year 1 weight gain recorded.</p>
+              <p>Provide <strong>lifestyle interventions (diet and exercise)</strong> and monitor weight regularly. Commence metformin if <strong>&gt;3% weight is gained</strong> at any time during the first year.</p>
+            `;
+          }
         }
       }
 
@@ -1087,14 +1173,24 @@
       decisionAlertBox.innerHTML = alertHtml;
 
       guidelineContextBox.innerHTML = `
-        <strong>Carolan et al. (2024) Core Principles:</strong> 8 in 10 experience antipsychotic-induced weight gain; low and normal BMI individuals are at higher risk of clinically significant increases in weight. Metformin is an <strong>unlicensed (off-label) indication</strong> and must always be paired with lifestyle interventions (diet &amp; exercise).
+        <strong>Carolan et al. (2024) Core Principles:</strong> 8 in 10 experience antipsychotic-induced weight gain; low and normal BMI individuals are at higher risk of clinically significant increases in weight. Metformin for AIWG is an <strong>unlicensed (off-label) indication</strong> and must always be paired with lifestyle interventions (diet &amp; exercise).
       `;
 
-      // 7. Update Dose Escalation Table (GFR 30-44 Special Consideration: Max 1g/day)
+      // 7. Update Dose Escalation Table (GFR 30-44 Special Consideration & Existing Metformin Banner)
+      const existingMetforminBanner = document.getElementById('existingMetforminBanner');
+      const titrationCardTitle = document.getElementById('titrationCardTitle');
       const renalCapWarning = document.getElementById('renalCapWarning');
       const maxDoseBadge = document.getElementById('maxDoseBadge');
       const rowWeek4 = document.getElementById('rowWeek4');
       const rowWeek6 = document.getElementById('rowWeek6');
+
+      if (alreadyOnMetformin) {
+        existingMetforminBanner.classList.remove('hidden');
+        titrationCardTitle.textContent = 'Metformin Target Dose & Optimization Reference';
+      } else {
+        existingMetforminBanner.classList.add('hidden');
+        titrationCardTitle.textContent = 'Metformin Dose Escalation';
+      }
 
       if (egfr === '30to44') {
         renalCapWarning.classList.remove('hidden');
@@ -1154,6 +1250,11 @@
       const weightText = (pctGain !== null)
         ? `Baseline ${baselineWeight.toFixed(1)} kg → Current ${currentWeight.toFixed(1)} kg (${kgGain >= 0 ? '+' : ''}${kgGain.toFixed(1)} kg / ${pctGain >= 0 ? '+' : ''}${pctGain.toFixed(1)}%)`
         : (!isNaN(baselineWeight) && baselineWeight > 0 ? `Baseline ${baselineWeight.toFixed(1)} kg` : 'Not entered');
+      const diabetesStatusText = alreadyOnMetformin
+        ? 'Comorbid diabetes — ALREADY TAKING METFORMIN (avoid duplicate prescribing)'
+        : (rfDiabetes ? 'Comorbid diabetes (not currently on metformin)' : 'No comorbid diabetes reported');
+
+      const isActiveMetforminPath = (actionType === 'cocommence' || actionType === 'commence' || (actionType === 'glp1' && !isMetforminContraindicated));
 
       const noteLines = [
         'ANTIPSYCHOTIC-INDUCED WEIGHT GAIN (AIWG) CLINICAL DECISION NOTE',
@@ -1162,16 +1263,19 @@
         `Antipsychotic Risk Tier : ${TIER_METADATA[selectedApRisk].label}`,
         `Treatment Stage         : ${timingLabel}`,
         `Anthropometrics         : BMI ${bmiText} | Weight: ${weightText}`,
+        `Diabetes / Therapy      : ${diabetesStatusText}`,
         `Pre-Treatment GFR       : ${egfrText}`,
         `Recommendation          : ${decisionTitle.textContent}`,
-        ...(actionType === 'cocommence' || actionType === 'commence' || (actionType === 'glp1' && !isMetforminContraindicated)
+        ...(isActiveMetforminPath
           ? [
-              `Titration Schedule      : Wk 1: 500mg AM | Wk 2: 500mg BD${egfr === '30to44' ? ' (Capped at 1g/day due to GFR 30–44)' : ' | Wk 4: 1g AM + 500mg PM | Wk 6: 1g BD (Target 1–2g/day)'}`,
+              alreadyOnMetformin
+                ? `Dosing / Optimization   : Continue existing metformin (do NOT issue duplicate prescription). Review current dose and consider titrating up toward 1–2g/day target${egfr === '30to44' ? ' (capped at 1g/day due to GFR 30–44)' : ''} in coordination with diabetes care.`
+                : `Titration Schedule      : Wk 1: 500mg AM | Wk 2: 500mg BD${egfr === '30to44' ? ' (Capped at 1g/day due to GFR 30–44)' : ' | Wk 4: 1g AM + 500mg PM | Wk 6: 1g BD (Target 1–2g/day)'}`,
               `Ongoing Monitoring      : Weight/BMI & lactic acidosis screen; LFTs & HbA1c annually; GFR ${needs6MoRenal ? '6 monthly' : 'annually'}; Vitamin B12 ${monB12 ? '6 monthly' : 'annually'}.`,
-              'Counselling & Safety    : Unlicensed (off-label) indication discussed. Take with/after food. Pair with lifestyle interventions (diet & exercise). Sick day rules, contrast hold (≥48h), and stop thresholds (GFR <30, BMI <20, or AP stopped) reviewed.'
+              'Counselling & Safety    : Unlicensed (off-label) indication for AIWG discussed. Take with/after food. Pair with lifestyle interventions (diet & exercise). Sick day rules, contrast hold (≥48h), and stop thresholds (GFR <30, BMI <20, or AP stopped) reviewed.'
             ]
           : [
-              'Plan                    : Lifestyle interventions (diet & exercise) provided; ongoing weight/cardiometabolic monitoring.'
+              `Plan                    : ${alreadyOnMetformin && actionType !== 'contraindicated' ? 'Continue existing metformin for diabetes; ' : ''}Lifestyle interventions (diet & exercise) provided; ongoing weight/cardiometabolic monitoring.`
             ])
       ];
 
@@ -1252,7 +1356,7 @@
       document.querySelector('input[name="egfr"][value="ge45"]').checked = true;
       ['ci_acidosis', 'ci_hepatic', 'ci_illness', 'ci_alcohol',
        'ethnicityBmi', 'youngPersonTrajectory',
-       'rf_htn', 'rf_lipids', 'rf_diabetes', 'rf_prediabetes', 'rf_osa',
+       'rf_htn', 'rf_lipids', 'rf_diabetes', 'rf_prediabetes', 'rf_osa', 'alreadyOnMetformin',
        'mon_renal', 'mon_b12'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.checked = false;
