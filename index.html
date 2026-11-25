@@ -333,6 +333,14 @@
 
               <div id="rfCheckboxesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                  <input type="checkbox" id="rf_htn" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
+                  <span class="text-xs sm:text-sm text-slate-800 font-medium">Hypertension</span>
+                </label>
+                <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                  <input type="checkbox" id="rf_lipids" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
+                  <span class="text-xs sm:text-sm text-slate-800 font-medium">Dyslipidaemia</span>
+                </label>
+                <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
                   <input type="checkbox" id="rf_diabetes" onchange="handleDiabetesChange()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                   <span class="text-xs sm:text-sm text-slate-800 font-medium">Diabetes (Type 1 or 2)</span>
                 </label>
@@ -811,22 +819,22 @@
       const youngPersonTrajectory = document.getElementById('youngPersonTrajectory').checked;
 
       // Cardiometabolic risk factors & existing diabetes therapy
-      const rfHtn = document.getElementById('rf_htn').checked;
-      const rfLipids = document.getElementById('rf_lipids').checked;
-      const rfDiabetes = document.getElementById('rf_diabetes').checked;
-      const rfPrediabetes = document.getElementById('rf_prediabetes').checked;
-      const rfOsa = document.getElementById('rf_osa').checked;
-      const alreadyOnMetformin = document.getElementById('alreadyOnMetformin').checked;
+      const rfHtn = Boolean(document.getElementById('rf_htn')?.checked);
+      const rfLipids = Boolean(document.getElementById('rf_lipids')?.checked);
+      const rfDiabetes = Boolean(document.getElementById('rf_diabetes')?.checked);
+      const rfPrediabetes = Boolean(document.getElementById('rf_prediabetes')?.checked);
+      const rfOsa = Boolean(document.getElementById('rf_osa')?.checked);
+      const alreadyOnMetformin = Boolean(document.getElementById('alreadyOnMetformin')?.checked);
 
       // Contraindications ("Avoid metformin with")
-      const ciAcidosis = document.getElementById('ci_acidosis').checked;
-      const ciHepatic = document.getElementById('ci_hepatic').checked;
-      const ciIllness = document.getElementById('ci_illness').checked;
-      const ciAlcohol = document.getElementById('ci_alcohol').checked;
+      const ciAcidosis = Boolean(document.getElementById('ci_acidosis')?.checked);
+      const ciHepatic = Boolean(document.getElementById('ci_hepatic')?.checked);
+      const ciIllness = Boolean(document.getElementById('ci_illness')?.checked);
+      const ciAlcohol = Boolean(document.getElementById('ci_alcohol')?.checked);
 
       // Monitoring modifiers
-      const monRenal = document.getElementById('mon_renal').checked;
-      const monB12 = document.getElementById('mon_b12').checked;
+      const monRenal = Boolean(document.getElementById('mon_renal')?.checked);
+      const monB12 = Boolean(document.getElementById('mon_b12')?.checked);
 
       // 2. Update Risk Tier Card Visual States
       ['high', 'medium', 'lower'].forEach(t => {
