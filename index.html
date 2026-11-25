@@ -293,12 +293,27 @@
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-700">
                   Cardiometabolic Risk Factors &amp; Comorbidities
                 </span>
-                <span id="rfBoxTag" class="text-[11px] font-medium text-slate-500">
-                  Guides Medium-Risk AP &amp; GLP-1 (BMI 27–30)
+                <div class="flex items-center gap-2">
+                  <span id="rfBoxTag" class="text-[11px] font-medium text-slate-500">
+                    Guides Medium-Risk AP &amp; GLP-1 (BMI 27–30)
+                  </span>
+                  <button type="button" id="toggleRfOverrideBtn" onclick="toggleRiskFactorsOverride()" class="hidden text-[11px] font-semibold text-teal-700 hover:text-teal-900 underline">
+                    Show anyway
+                  </button>
+                </div>
+              </div>
+
+              <!-- Auto-Bypass Notice Banner (Shown when High-Risk AP is selected & BMI is not 27-30) -->
+              <div id="rfBypassNotice" class="hidden rounded-lg bg-teal-50/80 border border-teal-200 px-3.5 py-2.5 text-xs text-teal-900 flex items-start gap-2">
+                <svg class="w-4 h-4 text-teal-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>
+                  <strong>Not required</strong> — High-Risk antipsychotics (Olanzapine, Clozapine) qualify for immediate metformin co-commencement regardless of baseline comorbidities. <em>(Automatically expands if BMI is 27–30 kg/m&sup2; to assess GLP-1 eligibility.)</em>
                 </span>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div id="rfCheckboxesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
                   <input type="checkbox" id="rf_htn" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                   <span class="text-xs sm:text-sm text-slate-800 font-medium">Hypertension</span>
@@ -397,10 +412,6 @@
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-rose-50/40 cursor-pointer">
                   <input type="checkbox" id="ci_alcohol" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                   <span class="text-xs sm:text-sm text-slate-700">Harmful alcohol use / acute intoxication</span>
-                </label>
-                <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-rose-50/40 cursor-pointer sm:col-span-2">
-                  <input type="checkbox" id="ci_lowbmi" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
-                  <span class="text-xs sm:text-sm text-slate-700">Current BMI &lt; 20 kg/m&sup2; <span class="text-slate-400">(auto-flagged if calculated BMI &lt; 20)</span></span>
                 </label>
               </div>
             </div>
@@ -692,6 +703,8 @@
   <script>
     // Global state for the selected antipsychotic risk tier ('high' | 'medium' | 'lower')
     let selectedApRisk = 'high';
+    // Manual override flag allowing clinicians to expand bypassed comorbidities on High-Risk AP if desired
+    let manualRfOverride = false;
 
     const TIER_METADATA = {
       high: {
@@ -716,14 +729,23 @@
      */
     function selectRiskTier(tier) {
       selectedApRisk = tier;
+      manualRfOverride = false;
       evaluateAlgorithm();
     }
 
     /**
-     * Updates the visual styling of the 3 risk tier cards and highlights relevant
-     * downstream sections in Step 2 to guide the clinician intuitively.
+     * Toggles manual visibility of the Cardiometabolic Risk Factors block when bypassed on High-Risk AP.
      */
-    function updateTierVisuals(apRisk) {
+    function toggleRiskFactorsOverride() {
+      manualRfOverride = !manualRfOverride;
+      evaluateAlgorithm();
+    }
+
+    /**
+     * Updates the visual styling of the 3 risk tier cards and dynamically adapts
+     * Step 2 sections (including auto-bypassing comorbidities for High-Risk AP unless BMI is 27-30).
+     */
+    function updateTierVisuals(apRisk, bmi) {
       const tiers = ['high', 'medium', 'lower'];
       tiers.forEach(t => {
         const card = document.getElementById(`tierCard_${t}`);
@@ -739,16 +761,43 @@
       const guidanceBanner = document.getElementById('tierGuidanceBanner');
       const riskFactorsBox = document.getElementById('riskFactorsBox');
       const rfBoxTag = document.getElementById('rfBoxTag');
+      const rfBypassNotice = document.getElementById('rfBypassNotice');
+      const rfCheckboxesGrid = document.getElementById('rfCheckboxesGrid');
+      const toggleRfOverrideBtn = document.getElementById('toggleRfOverrideBtn');
       const weightTrajectoryBox = document.getElementById('weightTrajectoryBox');
       const weightBoxTag = document.getElementById('weightBoxTag');
 
+      const isOverweightGlp1Window = (bmi !== null && bmi >= 27 && bmi < 30);
+
       if (apRisk === 'high') {
         guidanceBanner.className = 'rounded-lg bg-teal-50 border border-teal-200 p-3.5 text-xs text-teal-950 leading-relaxed';
-        guidanceBanner.innerHTML = `<strong>High-Risk Tier (Olanzapine, Clozapine — Not First-Line):</strong> <strong>Strong recommendation</strong> to co-commence metformin immediately regardless of baseline risk factors. Enter BMI/comorbidities in Step 2 if checking <strong>GLP-1 agonist</strong> criteria (BMI &ge;30 or 27–30 + comorbidity), and complete Step 3 safety screen.`;
+        guidanceBanner.innerHTML = `<strong>High-Risk Tier (Olanzapine, Clozapine):</strong> <strong>Strong recommendation</strong> to co-commence metformin immediately regardless of baseline comorbidities. Enter BMI in Step 2 if checking <strong>GLP-1 agonist</strong> criteria (BMI &ge;30 or 27–30 + comorbidity), and complete Step 3 safety screen.`;
 
-        riskFactorsBox.className = 'rounded-xl border border-slate-200 p-4 space-y-3 transition-all';
-        rfBoxTag.textContent = 'Optional for High-Risk AP (checks GLP-1 eligibility)';
-        rfBoxTag.className = 'text-[11px] font-medium text-slate-500';
+        if (isOverweightGlp1Window) {
+          // Automatically reveal comorbidities because BMI 27-30 can trigger GLP-1 Agonist
+          riskFactorsBox.className = 'rounded-xl border-2 border-indigo-400 bg-indigo-50/20 p-4 space-y-3 transition-all';
+          rfBoxTag.textContent = 'Active: Evaluates GLP-1 eligibility (BMI 27–30)';
+          rfBoxTag.className = 'text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-900';
+          rfBypassNotice.classList.add('hidden');
+          rfCheckboxesGrid.classList.remove('hidden');
+          toggleRfOverrideBtn.classList.add('hidden');
+        } else {
+          // Automatically bypass/collapse comorbidities on High-Risk AP
+          riskFactorsBox.className = 'rounded-xl border border-slate-200 bg-slate-50/40 p-4 space-y-3 transition-all';
+          rfBoxTag.textContent = 'Bypassed for High-Risk AP';
+          rfBoxTag.className = 'text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-200/80 text-slate-600';
+          toggleRfOverrideBtn.classList.remove('hidden');
+
+          if (manualRfOverride) {
+            rfBypassNotice.classList.add('hidden');
+            rfCheckboxesGrid.classList.remove('hidden');
+            toggleRfOverrideBtn.textContent = 'Hide';
+          } else {
+            rfBypassNotice.classList.remove('hidden');
+            rfCheckboxesGrid.classList.add('hidden');
+            toggleRfOverrideBtn.textContent = 'Show anyway';
+          }
+        }
 
         weightTrajectoryBox.className = 'rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-3 transition-all';
         weightBoxTag.classList.add('hidden');
@@ -756,8 +805,12 @@
         guidanceBanner.className = 'rounded-lg bg-amber-50 border border-amber-300 p-3.5 text-xs text-amber-950 leading-relaxed';
         guidanceBanner.innerHTML = `<strong>Medium-Risk Tier (Quetiapine, Paliperidone, Risperidone):</strong> <strong>Conditional recommendation</strong> to co-commence metformin immediately if the patient has <strong>&ge;1 baseline risk factor</strong> (Age 18–25, BMI &gt;25 [&gt;23 ethnicity-adjusted], HTN, dyslipidaemia, diabetes, pre-diabetes) OR <strong>&gt;3% weight gain</strong> in Year 1.`;
 
+        rfBypassNotice.classList.add('hidden');
+        rfCheckboxesGrid.classList.remove('hidden');
+        toggleRfOverrideBtn.classList.add('hidden');
+
         riskFactorsBox.className = 'rounded-xl border-2 border-amber-400 bg-amber-50/20 p-4 space-y-3 transition-all';
-        rfBoxTag.textContent = 'Highlighted: Any 1 factor triggers immediate metformin';
+        rfBoxTag.textContent = 'Guides Medium-Risk upfront metformin & GLP-1 (BMI 27–30)';
         rfBoxTag.className = 'text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900';
 
         weightTrajectoryBox.className = 'rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-3 transition-all';
@@ -766,9 +819,19 @@
         guidanceBanner.className = 'rounded-lg bg-sky-50 border border-sky-200 p-3.5 text-xs text-sky-950 leading-relaxed';
         guidanceBanner.innerHTML = `<strong>Lower-Risk Tier (All Other Antipsychotics):</strong> Immediate metformin is not routinely indicated at initiation unless meeting <strong>GLP-1 obesity criteria</strong>. <strong>Conditional recommendation</strong> to commence metformin if <strong>&gt;3% weight gain</strong> occurs during the first year.`;
 
-        riskFactorsBox.className = 'rounded-xl border border-slate-200 p-4 space-y-3 transition-all';
-        rfBoxTag.textContent = 'Checks GLP-1 eligibility if BMI 27–30';
-        rfBoxTag.className = 'text-[11px] font-medium text-slate-500';
+        rfBypassNotice.classList.add('hidden');
+        rfCheckboxesGrid.classList.remove('hidden');
+        toggleRfOverrideBtn.classList.add('hidden');
+
+        if (isOverweightGlp1Window) {
+          riskFactorsBox.className = 'rounded-xl border-2 border-indigo-400 bg-indigo-50/20 p-4 space-y-3 transition-all';
+          rfBoxTag.textContent = 'Active: Evaluates GLP-1 eligibility (BMI 27–30)';
+          rfBoxTag.className = 'text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-900';
+        } else {
+          riskFactorsBox.className = 'rounded-xl border border-slate-200 p-4 space-y-3 transition-all';
+          rfBoxTag.textContent = 'Evaluates GLP-1 eligibility if BMI 27–30';
+          rfBoxTag.className = 'text-[11px] font-medium text-slate-500';
+        }
 
         weightTrajectoryBox.className = 'rounded-xl border-2 border-sky-400 bg-sky-50/30 p-4 space-y-3 transition-all';
         weightBoxTag.classList.remove('hidden');
@@ -784,14 +847,22 @@
       const tierInfo = TIER_METADATA[apRisk];
       const timing = document.querySelector('input[name="timing"]:checked').value;
 
-      updateTierVisuals(apRisk);
-
       // 2. Step 2: Patient Profile, BMI & Cardiometabolic Criteria
       const ageGroup = document.querySelector('input[name="ageGroup"]:checked').value;
       const heightCm = parseFloat(document.getElementById('heightCm').value);
       const baselineWeight = parseFloat(document.getElementById('baselineWeight').value);
       const currentWeight = parseFloat(document.getElementById('currentWeight').value);
       const ethnicityBmi = document.getElementById('ethnicityBmi').checked;
+
+      // Calculate BMI first so updateTierVisuals can react to BMI 27-30 dynamically
+      const activeWeight = (!isNaN(currentWeight) && currentWeight > 0) ? currentWeight : baselineWeight;
+      let bmi = null;
+      if (!isNaN(heightCm) && heightCm > 0 && !isNaN(activeWeight) && activeWeight > 0) {
+        const heightM = heightCm / 100;
+        bmi = activeWeight / (heightM * heightM);
+      }
+
+      updateTierVisuals(apRisk, bmi);
 
       const rfHtn = document.getElementById('rf_htn').checked;
       const rfLipids = document.getElementById('rf_lipids').checked;
@@ -855,7 +926,6 @@
       const ciHepatic = document.getElementById('ci_hepatic').checked;
       const ciIllness = document.getElementById('ci_illness').checked;
       const ciAlcohol = document.getElementById('ci_alcohol').checked;
-      const ciLowBmiChecked = document.getElementById('ci_lowbmi').checked;
       const monRenal = document.getElementById('mon_renal').checked;
       const monB12 = document.getElementById('mon_b12').checked;
 
@@ -866,8 +936,8 @@
       if (ciHepatic) contraindications.push('Hepatic insufficiency');
       if (ciIllness) contraindications.push('Acute physical illness, dehydration, or severe infection');
       if (ciAlcohol) contraindications.push('Harmful alcohol use / acute intoxication');
-      if (ciLowBmiChecked || (bmi !== null && bmi < 20)) {
-        contraindications.push(`BMI < 20 kg/m²${bmi !== null ? ` (calculated: ${bmi.toFixed(1)} kg/m²)` : ''}`);
+      if (bmi !== null && bmi < 20) {
+        contraindications.push(`BMI < 20 kg/m² (calculated: ${bmi.toFixed(1)} kg/m²)`);
       }
 
       // GLP-1 Comorbidity Check: HTN, Dyslipidaemia, Diabetes, Pre-diabetes, OSA
@@ -1267,13 +1337,14 @@
 
     function resetForm() {
       selectedApRisk = 'high';
+      manualRfOverride = false;
       document.querySelector('input[name="timing"][value="initiation"]').checked = true;
       document.querySelector('input[name="ageGroup"][value="26to75"]').checked = true;
       document.getElementById('heightCm').value = '';
       document.getElementById('baselineWeight').value = '';
       document.getElementById('currentWeight').value = '';
       document.querySelector('input[name="egfr"][value="ge45"]').checked = true;
-      ['ci_acidosis', 'ci_hepatic', 'ci_illness', 'ci_alcohol', 'ci_lowbmi',
+      ['ci_acidosis', 'ci_hepatic', 'ci_illness', 'ci_alcohol',
        'ethnicityBmi',
        'rf_htn', 'rf_lipids', 'rf_diabetes', 'rf_prediabetes', 'rf_osa',
        'mon_renal', 'mon_b12'].forEach(id => {
