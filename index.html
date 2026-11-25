@@ -62,7 +62,7 @@
             AIWG Metformin &amp; GLP-1 Clinical Decision Support
           </h1>
           <p class="text-xs sm:text-sm text-slate-300 mt-1">
-            Adult Clinical Tool (&ge;18 years) &bull; 8 in 10 experience weight gain &bull; Always pair with lifestyle interventions
+            8 in 10 experience weight gain &bull; Low/normal BMI individuals are at higher risk &bull; Always pair with lifestyle interventions (diet &amp; exercise)
           </p>
         </div>
 
@@ -83,7 +83,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
       <p class="text-xs text-amber-900 leading-relaxed">
-        <strong>Clinician Verification Notice:</strong> Operationalizes Carolan et al. (<em>Schizophrenia Bulletin</em>, 2024). Metformin for antipsychotic-induced weight gain is an <strong>unlicensed (off-label) indication</strong>. Verify outputs against clinical judgement and local guidelines. Zero patient data is stored or transmitted.
+        <strong>Clinician Verification Notice:</strong> Operationalizes Carolan et al. (<em>Schizophrenia Bulletin</em>, 2024). Metformin for antipsychotic-induced weight gain is an <strong>unlicensed (off-label) indication</strong>. Choice of antipsychotic is the most important baseline risk factor. Zero patient data is stored or transmitted.
       </p>
     </div>
   </div>
@@ -96,7 +96,7 @@
       <div class="lg:col-span-7 space-y-6">
 
         <!-- ===================================================================== -->
-        <!-- STEP 1: ANTIPSYCHOTIC RISK TIER & TREATMENT STAGE (NO DROPDOWN)       -->
+        <!-- STEP 1: ANTIPSYCHOTIC RISK TIER & TREATMENT STAGE                     -->
         <!-- ===================================================================== -->
         <section class="bg-white rounded-xl border-2 border-teal-600/30 card-shadow overflow-hidden">
           <div class="bg-teal-50/80 px-5 py-3.5 border-b border-teal-200/80 flex flex-wrap items-center justify-between gap-2">
@@ -136,6 +136,7 @@
                   <div>
                     <div class="flex items-center justify-between gap-1 mb-1">
                       <span class="text-sm font-extrabold text-slate-900">High Risk</span>
+                      <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Not 1st line</span>
                     </div>
                     <p class="text-xs font-medium text-slate-700">Olanzapine, Clozapine</p>
                   </div>
@@ -159,7 +160,7 @@
                   </div>
                   <div class="mt-3 pt-2 border-t border-slate-100">
                     <span class="text-[11px] font-medium text-slate-600 block leading-tight">
-                      Co-commence if &ge;1 risk factor
+                      Co-commence if &ge;1 risk factor (or &gt;3% Year 1 gain)
                     </span>
                   </div>
                 </button>
@@ -170,11 +171,11 @@
                     <div class="flex items-center justify-between gap-1 mb-1">
                       <span class="text-sm font-extrabold text-slate-900">Lower Risk</span>
                     </div>
-                    <p class="text-xs font-medium text-slate-700">Aripiprazole, Amisulpride, Lurasidone, etc.</p>
+                    <p class="text-xs font-medium text-slate-700">All other antipsychotics</p>
                   </div>
                   <div class="mt-3 pt-2 border-t border-slate-100">
                     <span class="text-[11px] font-medium text-slate-600 block leading-tight">
-                      Lifestyle &amp; monitor Year 1 weight
+                      Commence if &gt;3% weight gain in Year 1
                     </span>
                   </div>
                 </button>
@@ -206,28 +207,31 @@
           </div>
 
           <div class="p-5 space-y-5">
-            <!-- Adult Age Group Selector -->
+            <!-- Age Group Selector -->
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                Adult Age Group (&ge;18 years)
+                Patient Age Group
               </label>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <label class="cursor-pointer">
-                  <input type="radio" name="ageGroup" value="18to25" onchange="evaluateAlgorithm()" class="peer sr-only" />
+                  <input type="radio" name="ageGroup" value="10to25" onchange="evaluateAlgorithm()" class="peer sr-only" />
                   <div class="p-3 rounded-lg border border-slate-200 text-center peer-checked:border-teal-600 peer-checked:bg-teal-50/70 peer-checked:ring-1 peer-checked:ring-teal-600 transition">
-                    <div class="text-sm font-bold text-slate-900">18–25 years</div>
+                    <div class="text-sm font-bold text-slate-900">10–25 years</div>
+                    <div class="text-[11px] text-teal-700 font-medium mt-0.5">Medium-Risk criterion</div>
                   </div>
                 </label>
                 <label class="cursor-pointer">
                   <input type="radio" name="ageGroup" value="26to75" checked onchange="evaluateAlgorithm()" class="peer sr-only" />
                   <div class="p-3 rounded-lg border border-slate-200 text-center peer-checked:border-teal-600 peer-checked:bg-teal-50/70 peer-checked:ring-1 peer-checked:ring-teal-600 transition">
                     <div class="text-sm font-bold text-slate-900">26–75 years</div>
+                    <div class="text-[11px] text-slate-500 mt-0.5">Standard adult cohort</div>
                   </div>
                 </label>
                 <label class="cursor-pointer">
                   <input type="radio" name="ageGroup" value="gt75" onchange="evaluateAlgorithm()" class="peer sr-only" />
                   <div class="p-3 rounded-lg border border-slate-200 text-center peer-checked:border-amber-600 peer-checked:bg-amber-50/70 peer-checked:ring-1 peer-checked:ring-amber-600 transition">
                     <div class="text-sm font-bold text-slate-900">&gt; 75 years</div>
+                    <div class="text-[11px] text-amber-700 font-medium mt-0.5">6-monthly renal check</div>
                   </div>
                 </label>
               </div>
@@ -271,6 +275,16 @@
                 <span id="weightChangeBadge" class="font-bold px-2 py-0.5 rounded"></span>
               </div>
 
+              <!-- Young Person Growth Trajectory Override (Visible when Age 10-25 is selected) -->
+              <div id="youngPersonTrajectoryBox" class="hidden pt-1">
+                <label class="flex items-start gap-2.5 p-2.5 rounded-lg bg-teal-50/80 border border-teal-200 cursor-pointer">
+                  <input type="checkbox" id="youngPersonTrajectory" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
+                  <span class="text-xs text-teal-950">
+                    <strong>Young Person Trajectory Criterion:</strong> &gt;3% weight gained <em>outside expected growth trajectory</em> during Year 1.
+                  </span>
+                </label>
+              </div>
+
               <!-- Infographic Quick Reference Examples -->
               <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-x-3 gap-y-1">
                 <span class="font-semibold text-slate-600">Guideline 3% reference:</span>
@@ -280,12 +294,12 @@
                 <span>&bull; 90 kg &rarr; +2.7 kg</span>
               </div>
 
-              <!-- Single Ethnicity-Adjusted BMI Checkbox -->
+              <!-- Ethnicity-Adjusted BMI Checkbox -->
               <div class="pt-2 border-t border-slate-200/80">
                 <label class="flex items-start gap-2.5 cursor-pointer">
                   <input type="checkbox" id="ethnicityBmi" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                   <span class="text-xs text-slate-700">
-                    <strong>Ethnicity-adjusted BMI overweight threshold applies (BMI &gt; 23 kg/m&sup2;)</strong> — South Asian, East Asian, Chinese, Black African/Caribbean, or Middle Eastern backgrounds.
+                    <strong>Adjust BMI threshold for ethnicity (BMI &gt; 23 kg/m&sup2; instead of &gt; 25 kg/m&sup2;)</strong> — South Asian, East Asian, Chinese, Black African/Caribbean, or Middle Eastern backgrounds.
                   </span>
                 </label>
               </div>
@@ -313,7 +327,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span>
-                  <strong>Not required</strong> — High-Risk antipsychotics (Olanzapine, Clozapine) qualify for immediate metformin co-commencement regardless of baseline comorbidities. <em>(Automatically expands if BMI is 27–30 kg/m&sup2; to assess GLP-1 eligibility.)</em>
+                  <strong>Not required</strong> — High-Risk antipsychotics (Olanzapine, Clozapine) qualify for immediate metformin co-commencement regardless of baseline comorbidities. <em>(Automatically expands if BMI is 27–30 kg/m&sup2; to assess GLP-1 Agonist eligibility.)</em>
                 </span>
               </div>
 
@@ -328,12 +342,12 @@
                 </label>
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
                   <input type="checkbox" id="rf_diabetes" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
-                  <span class="text-xs sm:text-sm text-slate-800 font-medium">Diabetes (Type 1 or Type 2)</span>
+                  <span class="text-xs sm:text-sm text-slate-800 font-medium">Diabetes (Type 1 or 2)</span>
                 </label>
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
                   <input type="checkbox" id="rf_osa" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                   <div>
-                    <span class="text-xs sm:text-sm text-slate-800 font-medium">Obstructive Sleep Apnoea (OSA)</span>
+                    <span class="text-xs sm:text-sm text-slate-800 font-medium">Obstructive Sleep Apnoea</span>
                     <span class="block text-[11px] text-indigo-700 font-medium">Qualifies for GLP-1 if BMI 27–30</span>
                   </div>
                 </label>
@@ -341,7 +355,7 @@
                   <input type="checkbox" id="rf_prediabetes" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                   <div>
                     <span class="text-xs sm:text-sm text-slate-800 font-medium">Pre-diabetes</span>
-                    <span class="block text-xs text-slate-500">HbA1c 42–47 mmol/mol (6.0–6.4%) OR Fasting plasma glucose 6.1–6.9 mmol/L</span>
+                    <span class="block text-xs text-slate-500">HbA1c 42–47 mmol/mol OR Fasting glucose 6.1–6.9 mmol/L</span>
                   </div>
                 </label>
               </div>
@@ -351,15 +365,14 @@
 
         <!-- ===================================================================== -->
         <!-- STEP 3: SAFETY SCREEN, RENAL FUNCTION & MONITORING MODIFIERS          -->
-        <!-- (Matches Red X "Avoid metformin with" & Pre-treatment Monitoring)     -->
         <!-- ===================================================================== -->
         <section class="bg-white rounded-xl border border-slate-200 card-shadow overflow-hidden">
           <div class="bg-slate-50 px-5 py-3.5 border-b border-slate-200 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
               <span class="w-6 h-6 rounded-full bg-rose-700 text-white text-xs font-bold flex items-center justify-center">3</span>
               <div>
-                <h2 class="text-sm sm:text-base font-bold text-slate-800">Safety Screen, Renal Function (eGFR) &amp; Monitoring</h2>
-                <p class="text-[11px] text-slate-500">Mandatory pre-treatment eGFR check &amp; contraindication exclusion</p>
+                <h2 class="text-sm sm:text-base font-bold text-slate-800">Safety Screen, Renal Function (GFR) &amp; Monitoring</h2>
+                <p class="text-[11px] text-slate-500">Mandatory pre-treatment renal function (GFR) check &amp; contraindication exclusion</p>
               </div>
             </div>
           </div>
@@ -368,14 +381,14 @@
             <!-- Baseline eGFR Selector -->
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                Pre-Treatment Renal Function (eGFR) <span class="text-rose-600">*</span>
+                Pre-Treatment Renal Function (GFR) <span class="text-rose-600">*</span>
               </label>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <label class="cursor-pointer">
                   <input type="radio" name="egfr" value="ge45" checked onchange="evaluateAlgorithm()" class="peer sr-only" />
                   <div class="p-3 rounded-lg border border-slate-200 peer-checked:border-teal-600 peer-checked:bg-teal-50/70 peer-checked:ring-1 peer-checked:ring-teal-600 transition">
                     <div class="text-sm font-bold text-slate-900">&ge; 45 mL/min</div>
-                    <div class="text-xs text-slate-500 mt-0.5">Standard dosing (max 2g/day)</div>
+                    <div class="text-xs text-slate-500 mt-0.5">Standard dosing (1–2 g/day)</div>
                   </div>
                 </label>
                 <label class="cursor-pointer">
@@ -411,11 +424,11 @@
                 </label>
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-rose-50/40 cursor-pointer">
                   <input type="checkbox" id="ci_illness" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
-                  <span class="text-xs sm:text-sm text-slate-700">Acute physical illness, dehydration, or severe infection</span>
+                  <span class="text-xs sm:text-sm text-slate-700">Acute physical illness (dehydration / severe infection)</span>
                 </label>
                 <label class="flex items-start gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-rose-50/40 cursor-pointer">
                   <input type="checkbox" id="ci_alcohol" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
-                  <span class="text-xs sm:text-sm text-slate-700">Harmful alcohol use / acute intoxication</span>
+                  <span class="text-xs sm:text-sm text-slate-700">Harmful use of alcohol / acute alcohol intoxication</span>
                 </label>
               </div>
             </div>
@@ -429,9 +442,9 @@
                 <input type="checkbox" id="mon_renal" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                 <div>
                   <span class="text-xs sm:text-sm text-slate-800 font-medium">
-                    Taking concomitant NSAIDs, ACE inhibitors, ARBs, or diuretics (especially loop diuretics)
+                    Taking concomitant NSAIDs, ACE inhibitors, angiotensin II receptor antagonists (ARBs), or diuretics (especially loop diuretics)
                   </span>
-                  <span class="block text-[11px] text-amber-700 font-medium">Increases renal function monitoring from annual to every 6 months</span>
+                  <span class="block text-[11px] text-amber-700 font-medium">Increases renal function monitoring from annually to 6 monthly (also applies if &gt;75 years)</span>
                 </div>
               </label>
 
@@ -439,9 +452,9 @@
                 <input type="checkbox" id="mon_b12" onchange="evaluateAlgorithm()" class="mt-0.5 w-4 h-4 rounded border-slate-300" />
                 <div>
                   <span class="text-xs sm:text-sm text-slate-800 font-medium">
-                    Vitamin B12 deficiency risk (vegan diet, bariatric surgery, prescribed PPI or colchicine, GI malabsorption)
+                    Vitamin B12 deficiency risk (vegan diet, bariatric surgery, prescribed PPI or colchicine, older age, or GI disorders affecting absorption)
                   </span>
-                  <span class="block text-[11px] text-amber-700 font-medium">Increases Vitamin B12 monitoring from annual to every 6 months</span>
+                  <span class="block text-[11px] text-amber-700 font-medium">Increases Vitamin B12 monitoring from annually to 6 monthly</span>
                 </div>
               </label>
             </div>
@@ -462,8 +475,8 @@
               <span id="decisionBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-extrabold uppercase tracking-wider bg-white/20 text-white">
                 CO-COMMENCE METFORMIN
               </span>
-              <span id="gradeStrengthBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-teal-900 shadow-sm">
-                GRADE: Strong Recommendation
+              <span id="pathwayStatusBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-teal-900 shadow-sm">
+                Carolan et al. (2024)
               </span>
             </div>
             <h2 id="decisionTitle" class="text-lg sm:text-xl font-extrabold mt-2.5 leading-snug">
@@ -485,8 +498,8 @@
               <!-- Populated dynamically -->
             </div>
 
-            <!-- GRADE & Prescribing Terminology Explainer -->
-            <div id="gradeExplainerBox" class="rounded-lg bg-slate-50 border border-slate-200/90 p-3 text-[11px] text-slate-600 leading-relaxed">
+            <!-- Guideline Context Box -->
+            <div id="guidelineContextBox" class="rounded-lg bg-slate-50 border border-slate-200/90 p-3 text-[11px] text-slate-600 leading-relaxed">
               <!-- Populated dynamically -->
             </div>
 
@@ -505,7 +518,7 @@
 
             <!-- Collapsible EMR Note Preview -->
             <div id="notePreviewContainer" class="hidden">
-              <textarea id="clinicalNoteTextarea" readonly rows="8" class="w-full rounded-lg border border-slate-300 bg-slate-50 p-3 font-mono text-xs text-slate-800 focus:outline-none"></textarea>
+              <textarea id="clinicalNoteTextarea" readonly rows="9" class="w-full rounded-lg border border-slate-300 bg-slate-50 p-3 font-mono text-xs text-slate-800 focus:outline-none"></textarea>
             </div>
           </div>
         </div>
@@ -520,9 +533,9 @@
           </div>
 
           <div class="p-5 space-y-3.5">
-            <!-- Renal Dose Cap Warning (Visible only if eGFR 30-44) -->
+            <!-- Renal Dose Cap Warning (Visible only if GFR 30-44) -->
             <div id="renalCapWarning" class="hidden rounded-lg bg-amber-50 border border-amber-300 p-3 text-xs text-amber-900">
-              <strong>Special Consideration (eGFR 30–44 mL/min):</strong> Maximum total daily dose is capped at <strong>1 g/day</strong> (500 mg twice daily). Do not escalate to Week 4 or Week 6.
+              <strong>Special Considerations (GFR 30–44 mL/min):</strong> Maximum total daily dose is <strong>1g/day</strong> (500 mg morning and 500 mg evening). Do not escalate to Week 4 or Week 6.
             </div>
 
             <div class="overflow-x-auto">
@@ -561,7 +574,7 @@
                     <td class="py-2.5 pl-2 text-right font-medium">1,500 mg</td>
                   </tr>
                   <tr id="rowWeek6">
-                    <td class="py-2.5 pr-2 font-semibold">Week 6+</td>
+                    <td class="py-2.5 pr-2 font-semibold">Week 6</td>
                     <td class="py-2.5 px-2">1 g</td>
                     <td class="py-2.5 px-2">1 g</td>
                     <td class="py-2.5 pl-2 text-right font-bold text-teal-800">2,000 mg</td>
@@ -571,14 +584,15 @@
             </div>
 
             <ul class="text-xs text-slate-600 space-y-1.5 pt-2 border-t border-slate-100 list-disc pl-4">
-              <li>Take <strong>with or after food</strong> to minimise transient GI side-effects.</li>
-              <li>Target dose <strong>1–2 g/day</strong> (BMI/weight or appetite increases inform escalation).</li>
-              <li><strong>Slow-release (MR) once daily</strong> may be used if GI side-effects persist or to support adherence.</li>
+              <li>Take <strong>with or after food</strong> to minimise GI side-effects.</li>
+              <li>Target dose of <strong>1–2 g/day</strong> — BMI/weight or increases in appetite should inform dose escalation schedule.</li>
+              <li>Available as a <strong>slow release tablet once a day</strong> — could be considered if GI side-effects persist, twice daily dosing is likely to lead to poor adherence, or if preferred by the individual.</li>
+              <li><strong>Special considerations:</strong> GFR 30–44 mL/min = Max 1 g/day.</li>
             </ul>
           </div>
         </div>
 
-        <!-- 3. Personalized Monitoring Plan Card -->
+        <!-- 3. Ongoing Monitoring Plan Card -->
         <div id="monitoringCard" class="bg-white rounded-xl border border-slate-200 card-shadow overflow-hidden">
           <div class="bg-slate-50 px-5 py-3.5 border-b border-slate-200">
             <h3 class="text-sm font-bold text-slate-800">Ongoing Monitoring Plan</h3>
@@ -588,7 +602,7 @@
               <li class="flex items-start gap-2.5">
                 <span class="w-2 h-2 rounded-full bg-teal-600 mt-1.5 shrink-0"></span>
                 <div>
-                  <span class="font-semibold text-slate-900">Weight/BMI &amp; Lactic Acidosis Screen:</span> Dyspnoea, muscle cramps, abdominal pain, hypothermia, or asthenia.
+                  <span class="font-semibold text-slate-900">Weight/BMI &amp; Lactic Acidosis Screen:</span> Signs and symptoms of lactic acidosis — dyspnoea, muscle cramps, abdominal pain, hypothermia, or asthenia.
                 </div>
               </li>
               <li class="flex items-start gap-2.5">
@@ -600,9 +614,9 @@
               <li class="flex items-start gap-2.5">
                 <span id="renalDot" class="w-2 h-2 rounded-full bg-teal-600 mt-1.5 shrink-0"></span>
                 <div>
-                  <span class="font-semibold text-slate-900">Renal Function (eGFR):</span>
+                  <span class="font-semibold text-slate-900">Renal Function (GFR):</span>
                   <span id="renalFreqBadge" class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 ml-1">Annually</span>
-                  <span id="renalFreqReason" class="block text-xs text-slate-500 mt-0.5">Standard monitoring interval.</span>
+                  <span id="renalFreqReason" class="block text-xs text-slate-500 mt-0.5">Standard interval (6 monthly if &gt;75 years or on NSAIDs, ACEi, ARBs, or diuretics).</span>
                 </div>
               </li>
               <li class="flex items-start gap-2.5">
@@ -610,38 +624,38 @@
                 <div>
                   <span class="font-semibold text-slate-900">Vitamin B12:</span>
                   <span id="b12FreqBadge" class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 ml-1">Annually</span>
-                  <span id="b12FreqReason" class="block text-xs text-slate-500 mt-0.5">Standard monitoring interval (treat deficiency per guidelines).</span>
+                  <span id="b12FreqReason" class="block text-xs text-slate-500 mt-0.5">Treat Vitamin B12 deficiency per local clinical guidelines; continue metformin as long as tolerated and not contraindicated.</span>
                 </div>
               </li>
             </ul>
           </div>
         </div>
 
-        <!-- 4. Clinical Pearls & Side-Effect Profile (Expanded by Default for Mobile & Desktop) -->
+        <!-- 4. Useful Information & Side-Effects Card -->
         <div class="bg-indigo-50/60 rounded-xl border border-indigo-200 card-shadow overflow-hidden">
           <button type="button" id="pearlsToggleBtn" aria-expanded="true" class="w-full min-h-[48px] px-5 py-3.5 flex items-center justify-between text-left hover:bg-indigo-100/50 transition">
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4 text-indigo-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span class="text-sm font-bold text-indigo-950">Clinical Pearls &amp; Side-Effect Profile</span>
+              <span class="text-sm font-bold text-indigo-950">Useful Information &amp; Side-Effects</span>
             </div>
             <span id="pearlsChevron" class="text-xs font-semibold text-indigo-800 shrink-0 ml-2">Hide &minus;</span>
           </button>
 
           <div id="pearlsBody" class="px-5 pb-4 pt-2 border-t border-indigo-200/60 text-xs text-indigo-950 space-y-3">
             <div>
-              <p class="font-bold text-indigo-900 mb-1">Mechanism &amp; Counselling Pearls:</p>
+              <p class="font-bold text-indigo-900 mb-1">Useful Information:</p>
               <ul class="list-disc pl-4 space-y-1 text-slate-700">
-                <li>Lowers appetite, reduces hepatic glucose production, and improves insulin response.</li>
-                <li>Does <strong>not</strong> stimulate insulin secretion and therefore <strong>does not cause hypoglycaemia</strong>.</li>
-                <li>Low-cost, widely accessible medicine (continue lifestyle interventions alongside).</li>
+                <li>Metformin lowers appetite, lowers hepatic glucose production, and improves insulin response.</li>
+                <li>It does <strong>not</strong> stimulate insulin secretion and so <strong>does not cause hypoglycaemia</strong>.</li>
+                <li>Metformin is a low cost medicine (continue lifestyle interventions alongside).</li>
               </ul>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
               <div class="bg-white/80 rounded-lg p-2.5 border border-indigo-100">
                 <div class="font-bold text-slate-900">&lt; 1 in 10</div>
-                <div class="text-[11px] text-slate-600 mt-0.5">Transient nausea, vomiting, diarrhoea, abdominal pain, loss of appetite; Vitamin B12 decrease</div>
+                <div class="text-[11px] text-slate-600 mt-0.5">Transient nausea, vomiting, diarrhoea, abdominal pain, and loss of appetite; Vitamin B12 decrease/deficiency</div>
               </div>
               <div class="bg-white/80 rounded-lg p-2.5 border border-indigo-100">
                 <div class="font-bold text-slate-900">&lt; 1 in 100</div>
@@ -655,24 +669,26 @@
           </div>
         </div>
 
-        <!-- 5. When to Stop & Sick Day Rules Safety Box -->
+        <!-- 5. When to Stop Safety Box -->
         <div class="bg-rose-50/70 rounded-xl border border-rose-200 card-shadow overflow-hidden">
           <button type="button" id="stopRulesToggleBtn" aria-expanded="true" class="w-full min-h-[48px] px-5 py-3.5 flex items-center justify-between text-left hover:bg-rose-100/50 transition">
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4 text-rose-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
               </svg>
-              <span class="text-sm font-bold text-rose-950">When to Stop &amp; Sick Day Rules</span>
+              <span class="text-sm font-bold text-rose-950">When to Stop</span>
             </div>
             <span id="stopRulesChevron" class="text-xs font-semibold text-rose-800 shrink-0 ml-2">Hide &minus;</span>
           </button>
 
           <div id="stopRulesBody" class="px-5 pb-4 pt-2 border-t border-rose-200/60 text-xs text-rose-950 space-y-1.5">
             <ul class="list-disc pl-4 space-y-1.5 leading-relaxed">
-              <li><strong>Sick Day Rule:</strong> Stop if systemically unwell with dehydration (severe diarrhoea/vomiting, fever, reduced fluid intake) or severe infection; restart when well.</li>
-              <li><strong>Lactic Acidosis / Organ Failure:</strong> Stop immediately if lactic acidosis is suspected, or with acute alcohol intoxication, decompensated heart failure, respiratory failure, recent MI, or shock.</li>
-              <li><strong>Iodinated Contrast Agents:</strong> Stop prior to or at administration; restart <strong>&ge;48 hours</strong> later once renal function is stable.</li>
-              <li><strong>Discontinuation Thresholds:</strong> Stop if <strong>eGFR &lt;30 mL/min</strong>, if <strong>BMI &lt;20 kg/m&sup2;</strong>, or if the antipsychotic is stopped.</li>
+              <li>If <strong>lactic acidosis is suspected</strong> or if risks for lactic acidosis present — dehydration (severe diarrhoea or vomiting, fever, or reduced fluid intake), acute alcohol intoxication, harmful alcohol use, decompensated heart failure, respiratory failure, recent myocardial infarction, shock, severe infection.</li>
+              <li><strong>Prior to or at the time of administration of iodinated contrast agents</strong> (restarted at least <strong>48 hours</strong> after).</li>
+              <li>If <strong>GFR drops below 30 mL/min</strong>.</li>
+              <li>If <strong>BMI &lt; 20 kg/m&sup2;</strong>.</li>
+              <li><strong>Sick day rule:</strong> Stop if systemically unwell (restart when well).</li>
+              <li>If <strong>antipsychotic is stopped</strong>.</li>
             </ul>
           </div>
         </div>
@@ -685,7 +701,7 @@
   <footer class="bg-white border-t border-slate-200 mt-12 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
       <div>
-        <strong>Reference:</strong> Carolan A, Hynes-Ryan C, Agarwal SM, et al. Metformin for the Prevention of Antipsychotic-Induced Weight Gain: Guideline Development and Consensus Validation. <em>Schizophrenia Bulletin</em>. 2024; sbae205.
+        <strong>Reference:</strong> Carolan A, Hynes-Ryan C, Agarwal SM, et al. Guideline on Metformin for Prevention of Antipsychotic-Induced Weight Gain. <em>Schizophrenia Bulletin</em>. 2024; sbae205.
       </div>
       <div class="text-slate-400">
         Client-side execution only &bull; No patient identifiers stored
@@ -712,7 +728,7 @@
 
     const TIER_METADATA = {
       high: {
-        label: 'High-Risk Antipsychotic (Olanzapine / Clozapine)',
+        label: 'High-Risk Antipsychotic (Olanzapine / Clozapine — Not first line)',
         shortLabel: 'High-Risk Antipsychotic',
         examples: 'Olanzapine, Clozapine'
       },
@@ -722,14 +738,14 @@
         examples: 'Quetiapine, Paliperidone, Risperidone'
       },
       lower: {
-        label: 'Lower-Risk Antipsychotic (All Other Antipsychotics)',
+        label: 'Lower-Risk Antipsychotic (All other antipsychotics)',
         shortLabel: 'Lower-Risk Antipsychotic',
         examples: 'All other antipsychotics'
       }
     };
 
     /**
-     * Handles clicking one of the 3 visual Risk Tier cards at the top of Step 1.
+     * Updates active antipsychotic risk tier and re-runs decision evaluation.
      */
     function selectRiskTier(tier) {
       selectedApRisk = tier;
@@ -738,38 +754,438 @@
     }
 
     /**
-     * Toggles manual visibility of the Cardiometabolic Risk Factors block when bypassed on High-Risk AP.
+     * Toggles visibility of bypassed comorbidities when High-Risk AP is selected.
      */
     function overrideComorbidityHide() {
       manualRfOverride = !manualRfOverride;
       evaluateAlgorithm();
     }
     window.overrideComorbidityHide = overrideComorbidityHide;
-// ... existing code ... -->
+
+    /**
+     * Evaluates all inputs against Carolan et al. (2024) clinical decision rules
+     * and updates UI cards, warnings, monitoring intervals, and EMR note output.
+     */
+    function evaluateAlgorithm() {
+      // 1. Gather Inputs
+      const timing = document.querySelector('input[name="timing"]:checked').value; // 'initiation' | 'ongoing'
+      const ageGroup = document.querySelector('input[name="ageGroup"]:checked').value; // '10to25' | '26to75' | 'gt75'
+      const egfr = document.querySelector('input[name="egfr"]:checked').value; // 'ge45' | '30to44' | 'lt30'
+
+      const heightCm = parseFloat(document.getElementById('heightCm').value);
+      const baselineWeight = parseFloat(document.getElementById('baselineWeight').value);
+      const currentWeight = parseFloat(document.getElementById('currentWeight').value);
+      const ethnicityBmi = document.getElementById('ethnicityBmi').checked;
+      const youngPersonTrajectory = document.getElementById('youngPersonTrajectory').checked;
+
+      // Cardiometabolic risk factors
       const rfHtn = document.getElementById('rf_htn').checked;
       const rfLipids = document.getElementById('rf_lipids').checked;
       const rfDiabetes = document.getElementById('rf_diabetes').checked;
       const rfPrediabetes = document.getElementById('rf_prediabetes').checked;
       const rfOsa = document.getElementById('rf_osa').checked;
 
+      // Contraindications ("Avoid metformin with")
+      const ciAcidosis = document.getElementById('ci_acidosis').checked;
+      const ciHepatic = document.getElementById('ci_hepatic').checked;
+      const ciIllness = document.getElementById('ci_illness').checked;
+      const ciAlcohol = document.getElementById('ci_alcohol').checked;
+
+      // Monitoring modifiers
+      const monRenal = document.getElementById('mon_renal').checked;
+      const monB12 = document.getElementById('mon_b12').checked;
+
+      // 2. Update Risk Tier Card Visual States
+      ['high', 'medium', 'lower'].forEach(t => {
+        const card = document.getElementById(`tierCard_${t}`);
+        if (t === selectedApRisk) {
+          card.className = 'text-left p-3.5 rounded-xl border-2 border-teal-600 bg-teal-50/60 ring-1 ring-teal-600 transition flex flex-col justify-between';
+        } else {
+          card.className = 'text-left p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white transition flex flex-col justify-between';
+        }
+      });
+
+      // Dynamic Tier Guidance Banner
+      const tierGuidanceBanner = document.getElementById('tierGuidanceBanner');
+      if (selectedApRisk === 'high') {
+        tierGuidanceBanner.innerHTML = `<strong>High Risk (Olanzapine, Clozapine — Not first line):</strong> Co-commence metformin immediately at initiation or switch alongside lifestyle interventions. Also evaluate GLP-1 Agonist criteria if BMI &ge;30 kg/m&sup2; (or BMI 27–30 kg/m&sup2; with a qualifying comorbidity).`;
+      } else if (selectedApRisk === 'medium') {
+        tierGuidanceBanner.innerHTML = `<strong>Medium Risk (Quetiapine, Paliperidone, Risperidone):</strong> Co-commence metformin if <strong>one of the following</strong> applies: Hypertension, Dyslipidaemia, Diabetes (Type 1 &amp; 2), Pre-diabetes, BMI &gt;${ethnicityBmi ? '23' : '25'} kg/m&sup2;, or Age 10–25 years — OR commence if <strong>&gt;3% weight gained</strong> at any time during Year 1.`;
+      } else {
+        tierGuidanceBanner.innerHTML = `<strong>Lower Risk (All other antipsychotics):</strong> Provide lifestyle interventions (diet &amp; exercise) and monitor weight. Commence metformin if <strong>&gt;3% weight gained</strong> at any time during the first year (or evaluate GLP-1 Agonist if BMI criteria are met).`;
+      }
+
+      // Show/Hide Young Person Trajectory Checkbox
+      const ypBox = document.getElementById('youngPersonTrajectoryBox');
+      if (ageGroup === '10to25') {
+        ypBox.classList.remove('hidden');
+      } else {
+        ypBox.classList.add('hidden');
+      }
+
+      // 3. Anthropometric & Weight Trajectory Calculations
+      const activeWeight = (!isNaN(currentWeight) && currentWeight > 0)
+        ? currentWeight
+        : ((!isNaN(baselineWeight) && baselineWeight > 0) ? baselineWeight : null);
+
+      let bmi = null;
+      if (!isNaN(heightCm) && heightCm >= 100 && activeWeight !== null) {
+        const heightM = heightCm / 100;
+        bmi = activeWeight / (heightM * heightM);
+      }
+
       const liveBmiPill = document.getElementById('liveBmiPill');
       if (bmi !== null) {
-// ... existing code ... -->
-    async function copyClinicalNote() {
+        liveBmiPill.innerHTML = `BMI: ${bmi.toFixed(1)} kg/m&sup2;`;
+        if (bmi < 20) {
+          liveBmiPill.className = 'text-xs font-bold px-2.5 py-1 rounded-md bg-rose-100 text-rose-800';
+        } else if (bmi >= 30) {
+          liveBmiPill.className = 'text-xs font-bold px-2.5 py-1 rounded-md bg-indigo-100 text-indigo-800';
+        } else if (bmi > (ethnicityBmi ? 23 : 25)) {
+          liveBmiPill.className = 'text-xs font-bold px-2.5 py-1 rounded-md bg-amber-100 text-amber-800';
+        } else {
+          liveBmiPill.className = 'text-xs font-bold px-2.5 py-1 rounded-md bg-teal-100 text-teal-800';
+        }
+      } else {
+        liveBmiPill.innerHTML = 'BMI: -- kg/m&sup2;';
+        liveBmiPill.className = 'text-xs font-bold px-2.5 py-1 rounded-md bg-slate-200 text-slate-700';
+      }
+
+      // Weight gain % calculation
+      let pctGain = null;
+      let kgGain = null;
+      let has3PctGain = false;
+      const weightChangeBanner = document.getElementById('weightChangeBanner');
+      const weightChangeText = document.getElementById('weightChangeText');
+      const weightChangeBadge = document.getElementById('weightChangeBadge');
+
+      if (!isNaN(baselineWeight) && baselineWeight > 0 && !isNaN(currentWeight) && currentWeight > 0) {
+        kgGain = currentWeight - baselineWeight;
+        pctGain = (kgGain / baselineWeight) * 100;
+        has3PctGain = pctGain > 3.0 || (ageGroup === '10to25' && youngPersonTrajectory);
+
+        weightChangeBanner.classList.remove('hidden');
+        const sign = kgGain >= 0 ? '+' : '';
+        weightChangeText.textContent = `Weight change from baseline (${baselineWeight.toFixed(1)} kg → ${currentWeight.toFixed(1)} kg): ${sign}${kgGain.toFixed(1)} kg (${sign}${pctGain.toFixed(1)}%)`;
+
+        if (pctGain > 3.0) {
+          weightChangeBanner.className = 'rounded-lg px-3.5 py-2 text-xs border border-amber-300 bg-amber-50 text-amber-950 flex items-center justify-between';
+          weightChangeBadge.className = 'font-bold px-2 py-0.5 rounded bg-amber-200 text-amber-950';
+          weightChangeBadge.textContent = '> 3% Gain Trigger Met';
+        } else {
+          weightChangeBanner.className = 'rounded-lg px-3.5 py-2 text-xs border border-slate-200 bg-white text-slate-700 flex items-center justify-between';
+          weightChangeBadge.className = 'font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700';
+          weightChangeBadge.textContent = '≤ 3% Gain';
+        }
+      } else if (ageGroup === '10to25' && youngPersonTrajectory) {
+        has3PctGain = true;
+        weightChangeBanner.classList.remove('hidden');
+        weightChangeBanner.className = 'rounded-lg px-3.5 py-2 text-xs border border-amber-300 bg-amber-50 text-amber-950 flex items-center justify-between';
+        weightChangeText.textContent = 'Young Person (10–25 yrs): >3% weight gained outside expected growth trajectory';
+        weightChangeBadge.className = 'font-bold px-2 py-0.5 rounded bg-amber-200 text-amber-950';
+        weightChangeBadge.textContent = 'Trigger Met';
+      } else {
+        weightChangeBanner.classList.add('hidden');
+      }
+
+      // Highlight Weight Trajectory Box when Lower Risk or Ongoing Year 1
+      const weightBoxTag = document.getElementById('weightBoxTag');
+      if (selectedApRisk === 'lower' || timing === 'ongoing') {
+        weightBoxTag.classList.remove('hidden');
+      } else {
+        weightBoxTag.classList.add('hidden');
+      }
+
+      // 4. Smart Visibility for Cardiometabolic Risk Factors Box
+      const isBmi27to30 = (bmi !== null && bmi >= 27 && bmi < 30);
+      const rfNeeded = (selectedApRisk === 'medium') || isBmi27to30;
+      const rfBypassNotice = document.getElementById('rfBypassNotice');
+      const rfCheckboxesGrid = document.getElementById('rfCheckboxesGrid');
+      const toggleRfOverrideBtn = document.getElementById('toggleRfOverrideBtn');
+
+      if (!rfNeeded && selectedApRisk === 'high') {
+        rfBypassNotice.classList.remove('hidden');
+        toggleRfOverrideBtn.classList.remove('hidden');
+        if (manualRfOverride) {
+          rfCheckboxesGrid.classList.remove('hidden');
+          toggleRfOverrideBtn.textContent = 'Hide comorbidities';
+        } else {
+          rfCheckboxesGrid.classList.add('hidden');
+          toggleRfOverrideBtn.textContent = 'Show anyway';
+        }
+      } else {
+        rfBypassNotice.classList.add('hidden');
+        toggleRfOverrideBtn.classList.add('hidden');
+        rfCheckboxesGrid.classList.remove('hidden');
+      }
+
+      // 5. Evaluate Carolan et al. (2024) Algorithm Logic
+      const bmiOverweightThreshold = ethnicityBmi ? 23.0 : 25.0;
+      const hasOverweightBmi = (bmi !== null && bmi > bmiOverweightThreshold);
+      const isYoungAge = (ageGroup === '10to25');
+
+      // Medium Risk qualifying factors ("One of the following"):
+      const mediumRiskCriteriaMet = [];
+      if (rfHtn) mediumRiskCriteriaMet.push('Hypertension');
+      if (rfLipids) mediumRiskCriteriaMet.push('Dyslipidaemia');
+      if (rfDiabetes) mediumRiskCriteriaMet.push('Diabetes (Type 1/2)');
+      if (rfPrediabetes) mediumRiskCriteriaMet.push('Pre-diabetes');
+      if (hasOverweightBmi) mediumRiskCriteriaMet.push(`BMI >${bmiOverweightThreshold} kg/m² (${bmi.toFixed(1)} kg/m²)`);
+      if (isYoungAge) mediumRiskCriteriaMet.push('Age 10–25 years');
+
+      // GLP-1 Agonist criteria
+      const glp1ComorbiditiesMet = [];
+      if (rfHtn) glp1ComorbiditiesMet.push('Hypertension');
+      if (rfLipids) glp1ComorbiditiesMet.push('Dyslipidaemia');
+      if (rfDiabetes) glp1ComorbiditiesMet.push('Diabetes (Type 1/2)');
+      if (rfPrediabetes) glp1ComorbiditiesMet.push('Pre-diabetes');
+      if (rfOsa) glp1ComorbiditiesMet.push('Obstructive sleep apnoea');
+
+      const glp1Eligible = (bmi !== null && bmi >= 30) || (isBmi27to30 && glp1ComorbiditiesMet.length > 0);
+
+      // Contraindications / Stop Thresholds check
+      const contraindications = [];
+      if (egfr === 'lt30') contraindications.push('Severe renal failure (GFR <30 mL/min)');
+      if (ciAcidosis) contraindications.push('Acute metabolic acidosis');
+      if (ciHepatic) contraindications.push('Hepatic insufficiency');
+      if (ciIllness) contraindications.push('Acute physical illness (dehydration / severe infection)');
+      if (ciAlcohol) contraindications.push('Harmful use of alcohol / acute alcohol intoxication');
+      if (bmi !== null && bmi < 20) contraindications.push(`BMI <20 kg/m² (${bmi.toFixed(1)} kg/m² — guideline discontinuation threshold)`);
+
+      const isMetforminContraindicated = contraindications.length > 0;
+
+      // Metformin Pathway Eligibility
+      let actionType = 'monitor'; // 'cocommence' | 'commence' | 'glp1' | 'contraindicated' | 'monitor'
+      let rationaleHtml = '';
+      let alertHtml = '';
+      let alertClass = 'hidden';
+
+      if (isMetforminContraindicated && !glp1Eligible) {
+        actionType = 'contraindicated';
+      } else if (glp1Eligible) {
+        actionType = 'glp1';
+      } else if (selectedApRisk === 'high') {
+        actionType = 'cocommence';
+      } else if (selectedApRisk === 'medium') {
+        if (mediumRiskCriteriaMet.length > 0) {
+          actionType = 'cocommence';
+        } else if (has3PctGain) {
+          actionType = 'commence';
+        } else {
+          actionType = 'monitor';
+        }
+      } else {
+        // Lower risk
+        if (has3PctGain) {
+          actionType = 'commence';
+        } else {
+          actionType = 'monitor';
+        }
+      }
+
+      // 6. Render Primary Decision Card
+      const decisionCard = document.getElementById('decisionCard');
+      const decisionHeader = document.getElementById('decisionHeader');
+      const decisionBadge = document.getElementById('decisionBadge');
+      const decisionTitle = document.getElementById('decisionTitle');
+      const decisionPathwayTag = document.getElementById('decisionPathwayTag');
+      const decisionRationale = document.getElementById('decisionRationale');
+      const decisionAlertBox = document.getElementById('decisionAlertBox');
+      const guidelineContextBox = document.getElementById('guidelineContextBox');
+
+      const timingLabel = timing === 'initiation' ? 'At Initiation / Switch' : 'Ongoing Treatment (Year 1)';
+      decisionPathwayTag.textContent = `${TIER_METADATA[selectedApRisk].shortLabel} • ${timingLabel}`;
+
+      if (actionType === 'contraindicated') {
+        decisionCard.className = 'rounded-xl border-2 border-rose-600 bg-white card-shadow overflow-hidden transition-all';
+        decisionHeader.className = 'bg-rose-700 text-white px-5 py-4';
+        decisionBadge.textContent = 'AVOID / STOP METFORMIN';
+        decisionTitle.textContent = 'Do Not Commence Metformin (Contraindicated)';
+
+        rationaleHtml = `
+          <p>Metformin must be <strong>avoided or stopped</strong> due to the following active exclusion criteria:</p>
+          <ul class="list-disc pl-5 space-y-1 font-medium text-rose-900">
+            ${contraindications.map(c => `<li>${c}</li>`).join('')}
+          </ul>
+          <p class="pt-1">Continue non-pharmacological <strong>lifestyle interventions (diet and exercise)</strong> and review antipsychotic choice if clinically appropriate.</p>
+        `;
+      } else if (actionType === 'glp1') {
+        decisionCard.className = 'rounded-xl border-2 border-indigo-600 bg-white card-shadow overflow-hidden transition-all';
+        decisionHeader.className = 'bg-indigo-700 text-white px-5 py-4';
+        decisionBadge.textContent = 'COMMENCE GLP-1 AGONIST';
+        decisionTitle.textContent = 'Commence GLP-1 Agonist (Fallback: Metformin)';
+
+        const glpReason = bmi >= 30
+          ? `BMI is <strong>${bmi.toFixed(1)} kg/m&sup2; (&ge;30 kg/m&sup2;)</strong>.`
+          : `BMI is <strong>${bmi.toFixed(1)} kg/m&sup2; (27–30 kg/m&sup2;)</strong> with qualifying comorbidity: <strong>${glp1ComorbiditiesMet.join(', ')}</strong>.`;
+
+        rationaleHtml = `
+          <p>${glpReason} Per Carolan et al. (2024), this patient meets criteria to <strong>commence a GLP-1 Agonist</strong> alongside lifestyle interventions (diet &amp; exercise).</p>
+        `;
+
+        if (isMetforminContraindicated) {
+          alertClass = 'rounded-lg p-3.5 text-xs sm:text-sm border border-rose-300 bg-rose-50 text-rose-950';
+          alertHtml = `<strong>Note on Metformin Fallback:</strong> Metformin is contraindicated in this patient (${contraindications.join('; ')}). Ensure GLP-1 Agonist access is prioritized.`;
+        } else {
+          alertClass = 'rounded-lg p-3.5 text-xs sm:text-sm border border-teal-300 bg-teal-50 text-teal-950';
+          alertHtml = `<strong>Guideline Fallback Rule ("If unavailable"):</strong> If a GLP-1 Agonist is unavailable, <strong>commence metformin</strong> instead using the titration schedule below.`;
+        }
+      } else if (actionType === 'cocommence') {
+        decisionCard.className = 'rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all';
+        decisionHeader.className = 'bg-teal-700 text-white px-5 py-4';
+        decisionBadge.textContent = 'CO-COMMENCE METFORMIN';
+        decisionTitle.textContent = 'Co-Commence Metformin Immediately';
+
+        if (selectedApRisk === 'high') {
+          rationaleHtml = `
+            <p>Patient is prescribed a <strong>High-Risk antipsychotic (${TIER_METADATA.high.examples})</strong>. Co-commence metformin immediately at initiation or switch alongside <strong>lifestyle interventions (diet and exercise)</strong>.</p>
+          `;
+        } else {
+          rationaleHtml = `
+            <p>Patient is prescribed a <strong>Medium-Risk antipsychotic (${TIER_METADATA.medium.examples})</strong> and meets &ge;1 co-commencement criterion:</p>
+            <ul class="list-disc pl-5 space-y-1 font-medium text-teal-900">
+              ${mediumRiskCriteriaMet.map(c => `<li>${c}</li>`).join('')}
+            </ul>
+            <p class="pt-1">Co-commence metformin immediately alongside <strong>lifestyle interventions (diet and exercise)</strong>.</p>
+          `;
+        }
+      } else if (actionType === 'commence') {
+        decisionCard.className = 'rounded-xl border-2 border-teal-600 bg-white card-shadow overflow-hidden transition-all';
+        decisionHeader.className = 'bg-teal-700 text-white px-5 py-4';
+        decisionBadge.textContent = 'COMMENCE METFORMIN';
+        decisionTitle.textContent = 'Commence Metformin (Year 1 Weight Gain Trigger)';
+
+        const gainDesc = (pctGain !== null && pctGain > 3.0)
+          ? `<strong>+${pctGain.toFixed(1)}% weight gain (+${kgGain.toFixed(1)} kg)</strong> during Year 1`
+          : `<strong>&gt;3% weight gained outside expected growth trajectory</strong> during Year 1`;
+
+        rationaleHtml = `
+          <p>Patient has experienced ${gainDesc} on a <strong>${TIER_METADATA[selectedApRisk].shortLabel}</strong>. Per Carolan et al. (2024), <strong>commence metformin</strong> and continue <strong>lifestyle interventions (diet and exercise)</strong>.</p>
+        `;
+      } else {
+        // Monitor / Lifestyle Interventions
+        decisionCard.className = 'rounded-xl border-2 border-sky-600 bg-white card-shadow overflow-hidden transition-all';
+        decisionHeader.className = 'bg-sky-700 text-white px-5 py-4';
+        decisionBadge.textContent = 'LIFESTYLE & MONITOR WEIGHT';
+        decisionTitle.textContent = 'Lifestyle Interventions & Year 1 Weight Monitoring';
+
+        if (selectedApRisk === 'medium') {
+          rationaleHtml = `
+            <p>Patient is on a <strong>Medium-Risk antipsychotic (${TIER_METADATA.medium.examples})</strong> with <strong>no baseline risk factors</strong> currently selected (Hypertension, Dyslipidaemia, Diabetes, Pre-diabetes, BMI &gt;${bmiOverweightThreshold} kg/m&sup2;, or Age 10–25).</p>
+            <p>Provide <strong>lifestyle interventions (diet and exercise)</strong> and monitor weight closely. Commence metformin immediately if <strong>&gt;3% weight is gained</strong> at any time during the first year.</p>
+          `;
+        } else {
+          rationaleHtml = `
+            <p>Patient is on a <strong>Lower-Risk antipsychotic (All other antipsychotics)</strong> without &gt;3% Year 1 weight gain recorded.</p>
+            <p>Provide <strong>lifestyle interventions (diet and exercise)</strong> and monitor weight regularly. Commence metformin if <strong>&gt;3% weight is gained</strong> at any time during the first year.</p>
+          `;
+        }
+      }
+
+      decisionRationale.innerHTML = rationaleHtml;
+      decisionAlertBox.className = alertClass;
+      decisionAlertBox.innerHTML = alertHtml;
+
+      guidelineContextBox.innerHTML = `
+        <strong>Carolan et al. (2024) Core Principles:</strong> 8 in 10 experience antipsychotic-induced weight gain; low and normal BMI individuals are at higher risk of clinically significant increases in weight. Metformin is an <strong>unlicensed (off-label) indication</strong> and must always be paired with lifestyle interventions (diet &amp; exercise).
+      `;
+
+      // 7. Update Dose Escalation Table (GFR 30-44 Special Consideration: Max 1g/day)
+      const renalCapWarning = document.getElementById('renalCapWarning');
+      const maxDoseBadge = document.getElementById('maxDoseBadge');
+      const rowWeek4 = document.getElementById('rowWeek4');
+      const rowWeek6 = document.getElementById('rowWeek6');
+
+      if (egfr === '30to44') {
+        renalCapWarning.classList.remove('hidden');
+        maxDoseBadge.textContent = 'Max: 1 g/day (GFR 30–44)';
+        maxDoseBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800';
+        rowWeek4.className = 'opacity-40 line-through bg-slate-50 text-slate-400';
+        rowWeek6.className = 'opacity-40 line-through bg-slate-50 text-slate-400';
+      } else {
+        renalCapWarning.classList.add('hidden');
+        maxDoseBadge.textContent = 'Target: 1–2 g/day';
+        maxDoseBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800';
+        rowWeek4.className = '';
+        rowWeek6.className = '';
+      }
+
+      // 8. Update Ongoing Monitoring Plan Card
+      const renalDot = document.getElementById('renalDot');
+      const renalFreqBadge = document.getElementById('renalFreqBadge');
+      const renalFreqReason = document.getElementById('renalFreqReason');
+
+      const needs6MoRenal = (ageGroup === 'gt75') || monRenal || (egfr === '30to44');
+      if (needs6MoRenal) {
+        renalDot.className = 'w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0';
+        renalFreqBadge.className = 'inline-block px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-900 ml-1';
+        renalFreqBadge.textContent = 'Every 6 months';
+        const reasons = [];
+        if (ageGroup === 'gt75') reasons.push('age >75 years');
+        if (monRenal) reasons.push('concomitant NSAIDs, ACEi, ARBs, or diuretics');
+        if (egfr === '30to44') reasons.push('moderate renal impairment (GFR 30–44 mL/min)');
+        renalFreqReason.textContent = `6-monthly monitoring indicated due to: ${reasons.join('; ')}.`;
+      } else {
+        renalDot.className = 'w-2 h-2 rounded-full bg-teal-600 mt-1.5 shrink-0';
+        renalFreqBadge.className = 'inline-block px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 ml-1';
+        renalFreqBadge.textContent = 'Annually';
+        renalFreqReason.textContent = 'Standard annual monitoring interval (6 monthly if >75 years or on NSAIDs, ACEi, ARBs, or diuretics).';
+      }
+
+      const b12Dot = document.getElementById('b12Dot');
+      const b12FreqBadge = document.getElementById('b12FreqBadge');
+      const b12FreqReason = document.getElementById('b12FreqReason');
+
+      if (monB12) {
+        b12Dot.className = 'w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0';
+        b12FreqBadge.className = 'inline-block px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-900 ml-1';
+        b12FreqBadge.textContent = 'Every 6 months';
+        b12FreqReason.textContent = '6-monthly monitoring indicated due to B12 deficiency risk factors (vegan diet, bariatric surgery, PPI/colchicine, older age, or GI malabsorption).';
+      } else {
+        b12Dot.className = 'w-2 h-2 rounded-full bg-teal-600 mt-1.5 shrink-0';
+        b12FreqBadge.className = 'inline-block px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 ml-1';
+        b12FreqBadge.textContent = 'Annually';
+        b12FreqReason.textContent = 'Treat Vitamin B12 deficiency per local clinical guidelines; continue metformin as long as tolerated and not contraindicated.';
+      }
+
+      // 9. Generate Structured Clinical Note for EMR
+      const egfrText = egfr === 'ge45' ? '≥45 mL/min' : (egfr === '30to44' ? '30–44 mL/min (Max 1g/day)' : '<30 mL/min (Contraindicated)');
+      const bmiText = bmi !== null ? `${bmi.toFixed(1)} kg/m²` : 'Not entered';
+      const weightText = (pctGain !== null)
+        ? `Baseline ${baselineWeight.toFixed(1)} kg → Current ${currentWeight.toFixed(1)} kg (${kgGain >= 0 ? '+' : ''}${kgGain.toFixed(1)} kg / ${pctGain >= 0 ? '+' : ''}${pctGain.toFixed(1)}%)`
+        : (!isNaN(baselineWeight) && baselineWeight > 0 ? `Baseline ${baselineWeight.toFixed(1)} kg` : 'Not entered');
+
+      const noteLines = [
+        'ANTIPSYCHOTIC-INDUCED WEIGHT GAIN (AIWG) CLINICAL DECISION NOTE',
+        'Guideline: Carolan et al., Schizophrenia Bulletin, 2024 (DOI: 10.1093/schbul/sbae205)',
+        '-----------------------------------------------------------------------',
+        `Antipsychotic Risk Tier : ${TIER_METADATA[selectedApRisk].label}`,
+        `Treatment Stage         : ${timingLabel}`,
+        `Anthropometrics         : BMI ${bmiText} | Weight: ${weightText}`,
+        `Pre-Treatment GFR       : ${egfrText}`,
+        `Recommendation          : ${decisionTitle.textContent}`,
+        ...(actionType === 'cocommence' || actionType === 'commence' || (actionType === 'glp1' && !isMetforminContraindicated)
+          ? [
+              `Titration Schedule      : Wk 1: 500mg AM | Wk 2: 500mg BD${egfr === '30to44' ? ' (Capped at 1g/day due to GFR 30–44)' : ' | Wk 4: 1g AM + 500mg PM | Wk 6: 1g BD (Target 1–2g/day)'}`,
+              `Ongoing Monitoring      : Weight/BMI & lactic acidosis screen; LFTs & HbA1c annually; GFR ${needs6MoRenal ? '6 monthly' : 'annually'}; Vitamin B12 ${monB12 ? '6 monthly' : 'annually'}.`,
+              'Counselling & Safety    : Unlicensed (off-label) indication discussed. Take with/after food. Pair with lifestyle interventions (diet & exercise). Sick day rules, contrast hold (≥48h), and stop thresholds (GFR <30, BMI <20, or AP stopped) reviewed.'
+            ]
+          : [
+              'Plan                    : Lifestyle interventions (diet & exercise) provided; ongoing weight/cardiometabolic monitoring.'
+            ])
+      ];
+
+      document.getElementById('clinicalNoteTextarea').value = noteLines.join('\n');
+    }
+    window.evaluateAlgorithm = evaluateAlgorithm;
+
+    /**
+     * Copies EMR clinical summary to clipboard with execCommand fallback.
+     */
+    function copyClinicalNote() {
       const textarea = document.getElementById('clinicalNoteTextarea');
       const previewContainer = document.getElementById('notePreviewContainer');
       const wasHidden = previewContainer.classList.contains('hidden');
-      const textToCopy = textarea.value;
-
-      if (navigator.clipboard && window.isSecureContext) {
-        try {
-          await navigator.clipboard.writeText(textToCopy);
-          showToast();
-          return;
-        } catch (err) {
-          // Fall back to execCommand below
-        }
-      }
 
       if (wasHidden) previewContainer.classList.remove('hidden');
       textarea.focus();
@@ -835,7 +1251,7 @@
       document.getElementById('currentWeight').value = '';
       document.querySelector('input[name="egfr"][value="ge45"]').checked = true;
       ['ci_acidosis', 'ci_hepatic', 'ci_illness', 'ci_alcohol',
-       'ethnicityBmi',
+       'ethnicityBmi', 'youngPersonTrajectory',
        'rf_htn', 'rf_lipids', 'rf_diabetes', 'rf_prediabetes', 'rf_osa',
        'mon_renal', 'mon_b12'].forEach(id => {
         const el = document.getElementById(id);
